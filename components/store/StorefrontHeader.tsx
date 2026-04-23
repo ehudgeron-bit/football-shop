@@ -39,7 +39,8 @@ export function StorefrontHeader() {
                 {session.user.role === "ADMIN" && (
                   <Link
                     href="/admin/dashboard"
-                    className="hidden rounded-pill border border-[#FF5000] px-3 py-1.5 text-xs font-semibold text-[#FF5000] transition hover:bg-[#FF5000] hover:text-white sm:block"
+                    className="hidden px-3 py-1.5 text-xs font-semibold text-[#507ABE] border border-[#507ABE] transition hover:bg-[#507ABE] hover:text-white sm:block"
+                    style={{ borderRadius: "var(--rounded-corners-radius)" }}
                   >
                     ניהול
                   </Link>
@@ -61,7 +62,10 @@ export function StorefrontHeader() {
                 </Link>
                 <Link
                   href="/register"
-                  className="hidden rounded-pill bg-[#111] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#333] sm:block"
+                  className="hidden px-4 py-2 text-sm font-semibold text-white transition sm:block"
+                  style={{ background: "var(--color-button-background)", borderRadius: "var(--rounded-corners-radius)" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "var(--color-button-background-hover)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "var(--color-button-background)")}
                 >
                   הרשמה
                 </Link>
@@ -139,7 +143,7 @@ export function StorefrontHeader() {
             ) : (
               <>
                 <li><Link href="/login" className="text-sm text-text-secondary" onClick={() => setMobileMenuOpen(false)}>כניסה</Link></li>
-                <li><Link href="/register" className="text-sm font-semibold text-[#FF5000]" onClick={() => setMobileMenuOpen(false)}>הרשמה</Link></li>
+                <li><Link href="/register" className="text-sm font-semibold text-[#333333]" onClick={() => setMobileMenuOpen(false)}>הרשמה</Link></li>
               </>
             )}
           </ul>

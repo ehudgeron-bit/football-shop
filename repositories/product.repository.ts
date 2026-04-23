@@ -18,6 +18,7 @@ export const productWithRelations = {
   nameEn: true,
   description: true,
   basePrice: true,
+  compareAtPrice: true,
   isFeatured: true,
   isActive: true,
   team: { select: { id: true, name: true, slug: true } },

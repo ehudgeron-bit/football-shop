@@ -56,6 +56,7 @@ CREATE TABLE "Product" (
     "basePrice" DECIMAL(65,30) NOT NULL,
     "teamId" TEXT,
     "categoryId" TEXT,
+    "compareAtPrice" DECIMAL(65,30),
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isFeatured" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -84,6 +84,8 @@ model Product {
   variants    ProductVariant[]
   cartItems   CartItem[]
 
+  compareAtPrice Decimal?
+
   isActive    Boolean          @default(true)
   isFeatured  Boolean          @default(false)
 

@@ -9,24 +9,38 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        // Heebo is the standard Hebrew-first font — designed for RTL
-        sans: ["var(--font-heebo)", "Helvetica", "Arial", "sans-serif"],
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "Noto Sans",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+        ],
       },
       colors: {
         brand: {
-          primary: "#111111",
-          red: "#EE0005",
-          orange: "#FF5000",
+          primary: "#333333",
+          hover: "#4F4F4F",
+          secondary: "#507ABE",
+          accent: "#E69900",
+          red: "#cf2e2e",
         },
         surface: {
           DEFAULT: "#ffffff",
-          secondary: "#F5F5F5",
+          secondary: "#F4F4F4",
           tertiary: "#E5E5E5",
         },
         text: {
-          primary: "#111111",
-          secondary: "#707072",
-          muted: "#9E9EA0",
+          primary: "#333333",
+          secondary: "#6d6c6c",
+          muted: "#767676",
         },
       },
       screens: {
@@ -48,6 +62,11 @@ const config: Config = {
       spacing: {
         "18": "4.5rem",
         "22": "5.5rem",
+      },
+      boxShadow: {
+        natural: "6px 6px 9px rgba(0,0,0,0.2)",
+        deep: "12px 12px 50px rgba(0,0,0,0.4)",
+        card: "0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)",
       },
     },
   },

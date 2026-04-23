@@ -3,7 +3,7 @@
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "accent";
 type Size = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -15,13 +15,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-brand-primary text-white hover:bg-gray-700 disabled:bg-surface-tertiary disabled:text-text-muted",
+    "bg-[#333333] text-white border border-[#333333] hover:bg-[#4F4F4F] hover:border-[#4F4F4F] disabled:bg-surface-tertiary disabled:border-surface-tertiary disabled:text-text-muted",
   secondary:
-    "border border-brand-primary bg-white text-brand-primary hover:bg-surface-secondary disabled:border-surface-tertiary disabled:text-text-muted",
+    "bg-white text-[#333333] border border-[#333333] hover:bg-surface-secondary disabled:border-surface-tertiary disabled:text-text-muted",
   ghost:
-    "bg-transparent text-brand-primary hover:bg-surface-secondary disabled:text-text-muted",
+    "bg-transparent text-[#333333] border border-transparent hover:bg-surface-secondary disabled:text-text-muted",
   danger:
-    "bg-red-600 text-white hover:bg-red-700 disabled:bg-surface-tertiary disabled:text-text-muted",
+    "bg-[#cf2e2e] text-white border border-[#cf2e2e] hover:bg-red-700 disabled:bg-surface-tertiary disabled:text-text-muted",
+  accent:
+    "bg-[#E69900] text-white border border-[#E69900] hover:bg-[#cc8800] disabled:bg-surface-tertiary disabled:text-text-muted",
 };
 
 const sizeClasses: Record<Size, string> = {
@@ -48,9 +50,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled || loading}
+        style={{ borderRadius: "var(--rounded-corners-radius)" }}
         className={[
-          "inline-flex items-center justify-center gap-2 rounded-pill font-medium",
-          "transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2",
+          "inline-flex items-center justify-center gap-2 font-semibold",
+          "transition-colors duration-150",
           "disabled:cursor-not-allowed",
           variantClasses[variant],
           sizeClasses[size],

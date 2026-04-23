@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --font-heebo: 'Heebo', sans-serif;
+}
+
+/* RTL base — applied globally since this is a Hebrew-first site */
+html {
+  direction: rtl;
+  font-family: var(--font-heebo), Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fix Tailwind's margin/padding utilities for RTL —
+   ms/me (margin-start/end) are already RTL-aware in Tailwind v3 */
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-white text-text-primary;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+
+  /* Smooth focus rings */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-primary ring-offset-2;
+  }
+}
+
+@layer components {
+  /* Input base — shared by all form inputs */
+  .input-base {
+    @apply w-full rounded-8 border border-surface-tertiary bg-white px-4 py-3
+           text-text-primary placeholder:text-text-muted
+           transition-colors duration-150
+           focus:border-brand-primary focus:outline-none
+           disabled:bg-surface-secondary disabled:cursor-not-allowed;
+  }
+
+  /* Badge labels (Coming Soon, Recycled Materials) */
+  .badge {
+    @apply inline-block text-xs font-medium px-2 py-0.5 rounded-4;
+  }
+
+  .badge-orange {
+    @apply badge bg-orange-50 text-orange-600;
+  }
+
+  .badge-green {
+    @apply badge bg-green-50 text-green-700;
+  }
+}
+
+/* Price formatting — numbers should always read LTR */
+.price {
+  direction: ltr;
+  unicode-bidi: embed;
+}

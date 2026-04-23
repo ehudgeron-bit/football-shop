@@ -1,0 +1,222 @@
+// Football Shirts E-Commerce — Production Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Users & Auth ────────────────────────────────────────────────────────────
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String
+  role           String    @default("CUSTOMER")  // "CUSTOMER" | "ADMIN"
+  firstName      String
+  lastName       String
+  phone          String?
+
+  addresses      Address[]
+  cart           Cart?
+  orders         Order[]
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  street     String
+  city       String
+  zipCode    String
+  country    String  @default("IL")
+  isDefault  Boolean @default(false)
+
+  orders     Order[]
+
+  @@index([userId])
+}
+
+// ─── Catalog ─────────────────────────────────────────────────────────────────
+
+model Team {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  country  String
+  logoUrl  String?
+
+  products Product[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+
+  products Product[]
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  name        String
+  nameEn      String?
+  description String
+  basePrice   Decimal
+
+  teamId      String?
+  team        Team?            @relation(fields: [teamId], references: [id])
+  categoryId  String?
+  category    Category?        @relation(fields: [categoryId], references: [id])
+
+  images      ProductImage[]
+  variants    ProductVariant[]
+  cartItems   CartItem[]
+
+  isActive    Boolean          @default(true)
+  isFeatured  Boolean          @default(false)
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([slug])
+  @@index([teamId])
+  @@index([categoryId])
+  @@index([isActive])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  altText   String?
+  position  Int     @default(0)
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id        String @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  size          String
+  stock         Int     @default(0)
+  priceOverride Decimal?
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@unique([productId, size])
+  @@index([productId])
+}
+
+// ─── Cart ─────────────────────────────────────────────────────────────────────
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?    @unique
+
+  items     CartItem[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String         @id @default(cuid())
+  cartId    String
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  productId String
+  product   Product        @relation(fields: [productId], references: [id])
+  quantity  Int
+
+  @@unique([cartId, variantId])
+  @@index([cartId])
+}
+
+// ─── Orders ───────────────────────────────────────────────────────────────────
+
+model Order {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique @default(cuid())
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  shippingAddress Address? @relation(fields: [addressId], references: [id])
+  addressId       String?
+
+  // JSON-serialized address snapshot (String because SQLite has no Json type)
+  shippingSnapshot String?
+
+  status          String   @default("PENDING")  // OrderStatus enum values
+  totalAmount     Decimal
+
+  items           OrderItem[]
+  payment         Payment?
+
+  notes           String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+
+  productName    String
+  productSlug    String
+  size           String
+  unitPrice      Decimal
+  quantity       Int
+  imageUrl       String?
+
+  @@index([orderId])
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+model Payment {
+  id              String   @id @default(cuid())
+  orderId         String   @unique
+  order           Order    @relation(fields: [orderId], references: [id])
+
+  provider        String   @default("tranzila")
+  providerRef     String?
+  amount          Decimal
+  currency        String   @default("ILS")
+  status          String   @default("INITIATED")  // PaymentStatus enum values
+
+  // JSON-serialized webhook payload (String because SQLite has no Json type)
+  rawWebhookPayload String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([providerRef])
+  @@index([orderId])
+}

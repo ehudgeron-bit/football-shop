@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { LoginForm } from "./LoginForm";
 
 export const metadata: Metadata = { title: "כניסה לחשבון" };
@@ -12,7 +13,9 @@ export default function LoginPage() {
           ברוך הבא חזרה לFootball Shop
         </p>
       </div>
-      <LoginForm />
+      <Suspense fallback={<div className="h-64 animate-pulse rounded-12 bg-surface-secondary" />}>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }

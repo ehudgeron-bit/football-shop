@@ -30,7 +30,7 @@ const categories = [
 
 export default async function HomePage() {
   let featured: Awaited<ReturnType<typeof productService.list>>["items"] = [];
-  let teams: { id: string; name: string; slug: string }[] = [];
+  let teams: Awaited<ReturnType<typeof prisma.team.findMany>> = [];
   try {
     [{ items: featured }, teams] = await Promise.all([
       productService.list({ featured: true, limit: 4 }),

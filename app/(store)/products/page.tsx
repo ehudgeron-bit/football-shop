@@ -106,8 +106,8 @@ async function ProductGrid({ sp }: { sp: SearchParams }) {
 
 export default async function ProductsPage({ searchParams }: PageProps) {
   const sp = await searchParams;
-  let categories: { id: string; name: string; slug: string }[] = [];
-  let teams: { id: string; name: string; slug: string }[] = [];
+  let categories: Awaited<ReturnType<typeof prisma.category.findMany>> = [];
+  let teams: Awaited<ReturnType<typeof prisma.team.findMany>> = [];
   try {
     [categories, teams] = await Promise.all([
       prisma.category.findMany({ orderBy: { name: "asc" } }),

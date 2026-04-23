@@ -24,14 +24,20 @@ interface PageProps {
 async function ProductGrid({ sp }: { sp: SearchParams }) {
   const page = Math.max(1, Number(sp.page ?? 1));
 
-  const { items, total } = await productService.list({
+  let items: Awaited<ReturnType<typeof productService.list>>["items"] = [];
+  let total = 0;
+  try {
+    ({ items, total } = await productService.list({
     categorySlug: sp.category,
     teamSlug: sp.team,
     featured: sp.featured === "true" ? true : undefined,
     search: sp.q,
     page,
     limit: 12,
-  });
+    }));
+  } catch {
+    // DB not yet configured
+  }
 
   if (items.length === 0) {
     return (
@@ -100,10 +106,16 @@ async function ProductGrid({ sp }: { sp: SearchParams }) {
 
 export default async function ProductsPage({ searchParams }: PageProps) {
   const sp = await searchParams;
-  const [categories, teams] = await Promise.all([
-    prisma.category.findMany({ orderBy: { name: "asc" } }),
-    prisma.team.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  let categories: { id: string; name: string; slug: string }[] = [];
+  let teams: { id: string; name: string; slug: string }[] = [];
+  try {
+    [categories, teams] = await Promise.all([
+      prisma.category.findMany({ orderBy: { name: "asc" } }),
+      prisma.team.findMany({ orderBy: { name: "asc" } }),
+    ]);
+  } catch {
+    // DB not yet configured
+  }
 
   const activeLabel = sp.q
     ? `תוצאות עבור "${sp.q}"`

@@ -29,10 +29,16 @@ const categories = [
 ];
 
 export default async function HomePage() {
-  const [{ items: featured }, teams] = await Promise.all([
-    productService.list({ featured: true, limit: 4 }),
-    prisma.team.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  let featured: Awaited<ReturnType<typeof productService.list>>["items"] = [];
+  let teams: { id: string; name: string; slug: string }[] = [];
+  try {
+    [{ items: featured }, teams] = await Promise.all([
+      productService.list({ featured: true, limit: 4 }),
+      prisma.team.findMany({ orderBy: { name: "asc" } }),
+    ]);
+  } catch {
+    // DB not yet configured — render static shell
+  }
 
   return (
     <div className="flex flex-col" dir="rtl">

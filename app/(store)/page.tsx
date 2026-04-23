@@ -3,7 +3,7 @@ import { productService } from "@/services/product.service";
 import { ProductCard } from "@/components/store/ProductCard";
 import { prisma } from "@/lib/prisma";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 // World Cup 2026 team flags strip
 const wc2026Teams = [

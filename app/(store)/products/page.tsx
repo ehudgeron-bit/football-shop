@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 
 export const metadata: Metadata = { title: "חולצות כדורגל" };
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 interface SearchParams extends Record<string, string | undefined> {
   category?: string;

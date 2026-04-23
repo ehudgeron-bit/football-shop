@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { productRepository } from "@/repositories/product.repository";
 import { prisma } from "@/lib/prisma";
 import { formatPrice } from "@/lib/format";

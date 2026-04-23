@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { orderRepository } from "@/repositories/order.repository";
 import { formatPrice, formatDate } from "@/lib/format";
 import { AdminOrderActions } from "./AdminOrderActions";

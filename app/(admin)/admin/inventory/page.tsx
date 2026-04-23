@@ -4,7 +4,7 @@ import { AdminInventoryEdit } from "./AdminInventoryEdit";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "ניהול מלאי" };
-export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
 export default async function AdminInventoryPage() {
   const products = await prisma.product.findMany({

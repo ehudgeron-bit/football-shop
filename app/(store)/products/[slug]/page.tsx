@@ -5,7 +5,7 @@ import { ProductGallery } from "./ProductGallery";
 import { AddToCartSection } from "./AddToCartSection";
 import { formatPrice } from "@/lib/format";
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };
 

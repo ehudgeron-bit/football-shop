@@ -3,7 +3,7 @@ import { formatPrice, formatDate } from "@/lib/format";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "לוח בקרה" };
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getStats() {
   const now = new Date();

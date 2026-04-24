@@ -2,6 +2,9 @@ import Link from "next/link";
 import { productService } from "@/services/product.service";
 import { ProductCard } from "@/components/store/ProductCard";
 import { prisma } from "@/lib/prisma";
+import { getBannerImages, getProductImages } from "@/lib/local-images";
+import { HeroCarousel } from "@/components/store/HeroCarousel";
+import { LocalImageCarousel } from "@/components/store/LocalImageCarousel";
 
 const trustItems = [
   {
@@ -100,61 +103,19 @@ export default async function HomePage() {
       productService.list({ limit: 4, page: 1 }),
       prisma.team.findMany({ orderBy: { name: "asc" } }),
     ]);
-    // Exclude products already in featured from new arrivals
     const featuredIds = new Set(featured.map((p) => p.id));
     newArrivals = newArrivals.filter((p) => !featuredIds.has(p.id)).slice(0, 4);
   } catch {
     // DB not yet configured — render static shell
   }
 
+  const bannerImages = getBannerImages();
+  const localProductImages = getProductImages();
+
   return (
     <div className="flex flex-col" dir="rtl">
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden bg-[#0a0a0a]"
-        style={{ minHeight: 480 }}
-      >
-        {/* Grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.3) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.3) 60px)",
-          }}
-        />
-        {/* Accent circles */}
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-[#507ABE] opacity-10 blur-3xl" />
-        <div className="absolute -bottom-16 -right-16 h-64 w-64 rounded-full bg-[#E69900] opacity-10 blur-3xl" />
-
-        <div className="relative mx-auto flex max-w-screen-lg flex-col items-center justify-center px-4 py-24 text-center sm:px-6">
-          <span className="mb-4 inline-block border border-[#E69900]/60 bg-[#E69900]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#E69900]" style={{ borderRadius: "var(--rounded-corners-radius)" }}>
-            מונדיאל 2026
-          </span>
-          <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl md:text-6xl">
-            חולצות כדורגל<br />
-            <span className="text-[#E69900]">מהנבחרות הגדולות</span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-lg text-base text-gray-400">
-            מקורי בלבד · ליגות ונבחרות מובילות · משלוח מהיר לכל הארץ
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/products"
-              className="px-8 py-3.5 text-sm font-bold text-white shadow-lg transition hover:opacity-90"
-              style={{ background: "var(--color-button-background)", borderRadius: "var(--rounded-corners-radius)" }}
-            >
-              לקנייה עכשיו
-            </Link>
-            <Link
-              href="/products?featured=true"
-              className="border border-white/30 bg-white/10 px-8 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-              style={{ borderRadius: "var(--rounded-corners-radius)" }}
-            >
-              מבצעים
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel images={bannerImages} />
 
       {/* ── WORLD CUP TEAMS STRIP ─────────────────────────── */}
       <section className="border-b border-surface-tertiary bg-surface-secondary py-8">
@@ -201,6 +162,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ── LOCAL PRODUCT IMAGE CAROUSEL ─────────────────── */}
+      <LocalImageCarousel images={localProductImages} title="גלריית מוצרים" />
 
       {/* ── CATEGORIES GRID ──────────────────────────────── */}
       <section className="border-t border-surface-tertiary bg-surface-secondary py-12">

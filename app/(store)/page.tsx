@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/store/ProductCard";
 import { prisma } from "@/lib/prisma";
 import { WorldCupHero } from "@/components/store/WorldCupHero";
 import { NationalTeamsSection } from "@/components/store/NationalTeamsSection";
+import { MysteryBoxSection } from "@/components/store/MysteryBoxSection";
 
 export const dynamic = "force-dynamic";
 
@@ -112,6 +113,9 @@ export default async function HomePage() {
 
       {/* ── NATIONAL TEAMS ─────────────────────────────────────── */}
       <NationalTeamsSection />
+
+      {/* ── MYSTERY BOX ────────────────────────────────────────── */}
+      <MysteryBoxSection />
 
       {/* ── BEST SELLERS ───────────────────────────────────────── */}
       {featured.length > 0 && (

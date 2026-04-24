@@ -93,17 +93,17 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Info */}
       <div className="mt-3 flex flex-col gap-0.5">
         {product.team && (
-          <p className="text-xs font-medium text-text-muted">{product.team.name}</p>
+          <p className="text-xs font-medium text-gray-400">{product.team.name}</p>
         )}
-        <p className="text-sm font-semibold leading-snug text-text-primary line-clamp-2">
+        <p className="text-sm font-semibold leading-snug text-white line-clamp-2">
           {product.name}
         </p>
 
         {/* Price row */}
         <div className="mt-1 flex items-center gap-2">
-          <p className="text-base font-bold text-text-primary">{formatPrice(minPrice)}</p>
+          <p className="text-base font-bold text-[#E69900]">{formatPrice(minPrice)}</p>
           {compareAt && compareAt > minPrice && (
-            <p className="text-sm text-text-muted line-through">{formatPrice(compareAt)}</p>
+            <p className="text-sm text-gray-500 line-through">{formatPrice(compareAt)}</p>
           )}
         </div>
       </div>

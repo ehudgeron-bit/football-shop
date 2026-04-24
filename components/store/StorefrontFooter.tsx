@@ -4,9 +4,10 @@ const cols = [
   {
     title: "קטגוריות",
     links: [
+      { href: "/products?category=national-teams", label: "נבחרות" },
       { href: "/products?category=match-jerseys", label: "חולצות משחק" },
-      { href: "/products?category=fan-jerseys", label: "חולצות אוהדים" },
-      { href: "/products?category=training", label: "חולצות אימון" },
+      { href: "/products?category=kids", label: "חליפות ילדים" },
+      { href: "/products?category=retro", label: "חולצות רטרו" },
       { href: "/products?featured=true", label: "מבצעים" },
     ],
   },

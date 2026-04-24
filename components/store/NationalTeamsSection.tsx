@@ -23,35 +23,21 @@ const teamFlags: Record<string, string> = {
 
 async function getNationalTeams() {
   try {
+    const nationalCat = await prisma.category.findUnique({ where: { slug: "national-teams" } });
+    const catFilter = nationalCat
+      ? { isActive: true, categoryId: nationalCat.id }
+      : { isActive: true };
+
     const teams = await prisma.team.findMany({
-      where: {
-        products: {
-          some: {
-            isActive: true,
-            categories: { some: { slug: "national-teams" } },
-          },
-        },
-      },
+      where: { products: { some: catFilter } },
       include: {
         products: {
-          where: {
-            isActive: true,
-            categories: { some: { slug: "national-teams" } },
-          },
+          where: catFilter,
           include: { images: { orderBy: { position: "asc" }, take: 1 } },
           orderBy: { isFeatured: "desc" },
           take: 1,
         },
-        _count: {
-          select: {
-            products: {
-              where: {
-                isActive: true,
-                categories: { some: { slug: "national-teams" } },
-              },
-            },
-          },
-        },
+        _count: { select: { products: { where: catFilter } } },
       },
       orderBy: { name: "asc" },
     });

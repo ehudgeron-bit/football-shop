@@ -3,6 +3,7 @@ import { productService } from "@/services/product.service";
 import { ProductCard } from "@/components/store/ProductCard";
 import { prisma } from "@/lib/prisma";
 import { WorldCupHero } from "@/components/store/WorldCupHero";
+import { NationalTeamsSection } from "@/components/store/NationalTeamsSection";
 
 export const dynamic = "force-dynamic";
 
@@ -108,6 +109,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── NATIONAL TEAMS ─────────────────────────────────────── */}
+      <NationalTeamsSection />
 
       {/* ── BEST SELLERS ───────────────────────────────────────── */}
       {featured.length > 0 && (

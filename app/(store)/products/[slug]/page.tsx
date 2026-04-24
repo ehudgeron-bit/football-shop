@@ -12,7 +12,7 @@ type PageProps = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const product = await productService.getBySlug(slug);
+    const product = await productService.getBySlug(decodeURIComponent(slug));
     return {
       title: product.name,
       description: product.description.slice(0, 160),
@@ -27,7 +27,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   let product;
   try {
-    product = await productService.getBySlug(slug);
+    product = await productService.getBySlug(decodeURIComponent(slug));
   } catch {
     notFound();
   }

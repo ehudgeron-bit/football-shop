@@ -15,6 +15,7 @@ export function StorefrontHeader() {
     { href: "/products?category=national-teams", label: "נבחרות" },
     { href: "/products?category=match-jerseys", label: "חולצות משחק" },
     { href: "/products?featured=true", label: "מבצעים" },
+    { href: "/mystery-box", label: "🎁 קופסת מסתורין" },
   ];
 
   return (

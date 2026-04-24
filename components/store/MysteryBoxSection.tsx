@@ -89,7 +89,7 @@ export function MysteryBoxSection() {
             {/* CTA */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                href="/products?q=מונדיאל"
+                href="/mystery-box"
                 className="flex-shrink-0 rounded-pill bg-[#E69900] px-8 py-4 text-center text-sm font-black text-black shadow-lg transition hover:bg-[#cc8800]"
               >
                 הזמן קופסת מסתורין ←

@@ -7,14 +7,14 @@ import { WorldCupHero } from "@/components/store/WorldCupHero";
 export const dynamic = "force-dynamic";
 
 const nations = [
-  { name: "ארגנטינה", q: "ארגנטינה", flag: "🇦🇷" },
-  { name: "ברזיל",    q: "ברזיל",    flag: "🇧🇷" },
-  { name: "צרפת",     q: "צרפת",     flag: "🇫🇷" },
-  { name: "ספרד",     q: "ספרד",     flag: "🇪🇸" },
-  { name: "גרמניה",   q: "גרמניה",   flag: "🇩🇪" },
-  { name: "אנגליה",   q: "אנגליה",   flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-  { name: "פורטוגל",  q: "פורטוגל",  flag: "🇵🇹" },
-  { name: "הולנד",    q: "הולנד",    flag: "🇳🇱" },
+  { name: "ארגנטינה", q: "ארגנטינה", flag: "🇦🇷", color: "#74ACDF" },
+  { name: "ברזיל",    q: "ברזיל",    flag: "🇧🇷", color: "#009C3B" },
+  { name: "צרפת",     q: "צרפת",     flag: "🇫🇷", color: "#002395" },
+  { name: "ספרד",     q: "ספרד",     flag: "🇪🇸", color: "#AA151B" },
+  { name: "גרמניה",   q: "גרמניה",   flag: "🇩🇪", color: "#CC0000" },
+  { name: "אנגליה",   q: "אנגליה",   flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", color: "#CF081F" },
+  { name: "פורטוגל",  q: "פורטוגל",  flag: "🇵🇹", color: "#006600" },
+  { name: "הולנד",    q: "הולנד",    flag: "🇳🇱", color: "#FF6000" },
 ];
 
 async function getData() {
@@ -80,7 +80,7 @@ export default async function HomePage() {
       {/* ── NATIONS ──────────────────────────────────────────── */}
       <section className="px-6 py-20 sm:py-24">
         <div className="mx-auto max-w-screen-xl">
-          <SectionHeading label="World Cup 2026" title="נבחרות המונדיאל" href="/products?category=national-teams" />
+          <SectionHeading label="🏆 FIFA World Cup 2026" title="נבחרות המונדיאל" href="/products?category=national-teams" />
           <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
             {nations.map((nation, i) => {
               const img = nationImages[i]?.images?.[0]?.url;
@@ -88,8 +88,8 @@ export default async function HomePage() {
                 <Link
                   key={nation.q}
                   href={`/products?q=${encodeURIComponent(nation.q)}`}
-                  className="group relative overflow-hidden bg-[#f4f4f5] dark:bg-[#161616]"
-                  style={{ aspectRatio: "2/3", borderRadius: 12 }}
+                  className="group relative overflow-hidden dark:bg-[#161616]"
+                  style={{ aspectRatio: "2/3", borderRadius: 12, background: nation.color + "22" }}
                 >
                   {img && (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -97,9 +97,14 @@ export default async function HomePage() {
                       className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%)" }} />
-                  <div className="absolute right-1.5 top-1.5 text-base drop-shadow">{nation.flag}</div>
-                  <p className="absolute bottom-0 left-0 right-0 p-2 text-center text-[10px] font-bold text-white">
+                  {/* team-color glow at bottom */}
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${nation.color}ee 0%, rgba(0,0,0,0.2) 50%, transparent 70%)` }} />
+                  {/* flag badge */}
+                  <div className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full text-lg shadow-lg backdrop-blur-sm"
+                    style={{ background: "rgba(0,0,0,0.45)" }}>
+                    {nation.flag}
+                  </div>
+                  <p className="absolute bottom-0 left-0 right-0 p-2 text-center text-[10px] font-bold text-white drop-shadow-md">
                     {nation.name}
                   </p>
                 </Link>
@@ -113,7 +118,7 @@ export default async function HomePage() {
       {featured.length > 0 && (
         <section className="border-t border-[#f4f4f5] px-6 py-20 dark:border-[#1c1c1c] sm:py-24">
           <div className="mx-auto max-w-screen-xl">
-            <SectionHeading label="Best Sellers" title="הנמכרים ביותר" href="/products?featured=true" />
+            <SectionHeading label="⚽ Best Sellers" title="הנמכרים ביותר" href="/products?featured=true" />
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
               {featured.slice(0, 8).map((p) => <ProductCard key={p.id} product={p} />)}
             </div>
@@ -175,7 +180,7 @@ export default async function HomePage() {
       {newArrivals.length > 0 && (
         <section className="border-t border-[#f4f4f5] px-6 py-20 dark:border-[#1c1c1c] sm:py-24">
           <div className="mx-auto max-w-screen-xl">
-            <SectionHeading label="New In" title="הגיעו זה עתה" href="/products" />
+            <SectionHeading label="🆕 New In" title="הגיעו זה עתה" href="/products" />
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
               {newArrivals.slice(0, 8).map((p) => <ProductCard key={p.id} product={p} />)}
             </div>

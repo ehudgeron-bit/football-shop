@@ -35,22 +35,26 @@ export async function WorldCupHero() {
       )}
 
       {/* Cinematic overlays */}
-      <div className="absolute inset-0 bg-[#0a0a0a]/55" />
+      <div className="absolute inset-0 bg-[#0a0a0a]/50" />
       <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 60%)" }} />
       <div className="absolute inset-0" style={{ background: "linear-gradient(to right, transparent 50%, rgba(0,0,0,0.15) 100%)" }} />
+      {/* Colorful glow — World Cup energy */}
+      <div className="absolute bottom-0 left-0 right-0 h-64 opacity-30" style={{ background: "linear-gradient(to top, #E69900 0%, transparent 100%)" }} />
+      <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full opacity-10 blur-3xl" style={{ background: "#74ACDF", transform: "translate(30%, 30%)" }} />
+      <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full opacity-10 blur-3xl" style={{ background: "#009C3B", transform: "translate(-30%, 30%)" }} />
 
       {/* Content — bottom-right aligned (RTL = bottom-right is visually prominent) */}
       <div className="relative flex h-full flex-col justify-end" dir="rtl">
         <div className="mx-auto w-full max-w-screen-xl px-8 pb-20 sm:pb-28">
-          <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#E69900]">
-            FIFA World Cup · 2026
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#E69900]/30 bg-[#E69900]/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#E69900]">
+            🏆 FIFA World Cup · 2026
           </p>
           <h1 className="max-w-xl text-5xl font-black leading-[1.05] text-white sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.025em" }}>
             חולצות כדורגל<br />
             <span className="text-white/60">למי שמבין</span>
           </h1>
           <p className="mt-5 max-w-xs text-sm font-normal leading-relaxed text-white/50">
-            חולצות מקוריות · 48 נבחרות · משלוח מהיר
+            🇦🇷 🇧🇷 🇫🇷 🇪🇸 🇩🇪 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🇵🇹 🇳🇱 · משלוח מהיר
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link

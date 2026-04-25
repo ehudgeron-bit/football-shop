@@ -82,17 +82,17 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="flex flex-col bg-[#0a0a0a]" dir="rtl">
+    <div className="flex flex-col bg-white dark:bg-[#0a0a0a]" dir="rtl">
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
+      {/* ── HERO — always dark (design intent) ──────────────────── */}
       <WorldCupHero />
 
       {/* ── WORLD CUP NATIONS ──────────────────────────────────── */}
-      <section className="border-b border-white/8 bg-[#111111] py-8">
+      <section className="border-b border-gray-200 bg-gray-50 py-8 dark:border-white/8 dark:bg-[#111111]">
         <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
           <div className="mb-5 flex items-center gap-3">
             <span className="text-lg">🏆</span>
-            <span className="text-base font-black text-white">נבחרות מונדיאל 2026</span>
+            <span className="text-base font-black text-gray-900 dark:text-white">נבחרות מונדיאל 2026</span>
             <span className="rounded-4 bg-[#E69900] px-2 py-0.5 text-[10px] font-black text-black">48 נבחרות</span>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -100,18 +100,18 @@ export default async function HomePage() {
               <Link
                 key={team.name}
                 href={`/products?q=${encodeURIComponent(team.q)}`}
-                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-white/10 bg-white/5 px-4 py-3 transition hover:border-[#E69900]/50 hover:bg-[#E69900]/10"
+                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-gray-200 bg-white px-4 py-3 shadow-sm transition hover:border-[#E69900]/50 hover:bg-[#E69900]/5 dark:border-white/10 dark:bg-white/5 dark:hover:border-[#E69900]/50 dark:hover:bg-[#E69900]/10"
                 style={{ minWidth: 76 }}
               >
                 <span className="text-3xl leading-none">{team.flag}</span>
-                <span className="text-[11px] font-semibold text-gray-300 group-hover:text-[#E69900]">{team.name}</span>
+                <span className="text-[11px] font-semibold text-gray-600 group-hover:text-[#E69900] dark:text-gray-300">{team.name}</span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── NATIONAL TEAMS ─────────────────────────────────────── */}
+      {/* ── NATIONAL TEAMS SECTION ─────────────────────────────── */}
       <NationalTeamsSection />
 
       {/* ── MYSTERY BOX ────────────────────────────────────────── */}
@@ -123,7 +123,7 @@ export default async function HomePage() {
           <div className="mb-7 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-              <h2 className="text-xl font-black text-white">המוצרים הנמכרים ביותר</h2>
+              <h2 className="text-xl font-black text-gray-900 dark:text-white">המוצרים הנמכרים ביותר</h2>
             </div>
             <Link href="/products" className="flex items-center gap-1 text-sm font-semibold text-[#E69900] hover:text-[#cc8800]">
               לכל המוצרים ←
@@ -138,11 +138,11 @@ export default async function HomePage() {
       )}
 
       {/* ── CHAMPIONS LEAGUE CLUBS ─────────────────────────────── */}
-      <section className="border-y border-white/8 bg-[#111111] py-8">
+      <section className="border-y border-gray-200 bg-gray-50 py-8 dark:border-white/8 dark:bg-[#111111]">
         <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
           <div className="mb-5 flex items-center gap-3">
             <span className="text-lg">⭐</span>
-            <span className="text-base font-black text-white">ליגת האלופות</span>
+            <span className="text-base font-black text-gray-900 dark:text-white">ליגת האלופות</span>
             <span className="rounded-4 bg-[#507ABE] px-2 py-0.5 text-[10px] font-black text-white">Champions League</span>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -150,11 +150,11 @@ export default async function HomePage() {
               <Link
                 key={club.name}
                 href={`/products?q=${encodeURIComponent(club.q)}`}
-                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-white/10 bg-white/5 px-4 py-3 transition hover:border-[#507ABE]/50 hover:bg-[#507ABE]/10"
+                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-gray-200 bg-white px-4 py-3 shadow-sm transition hover:border-[#507ABE]/50 hover:bg-[#507ABE]/5 dark:border-white/10 dark:bg-white/5 dark:hover:border-[#507ABE]/50 dark:hover:bg-[#507ABE]/10"
                 style={{ minWidth: 88 }}
               >
                 <span className="text-2xl leading-none">{club.flag}</span>
-                <span className="text-center text-[11px] font-semibold leading-tight text-gray-300 group-hover:text-[#507ABE]">{club.name}</span>
+                <span className="text-center text-[11px] font-semibold leading-tight text-gray-600 group-hover:text-[#507ABE] dark:text-gray-300">{club.name}</span>
               </Link>
             ))}
           </div>
@@ -167,7 +167,6 @@ export default async function HomePage() {
           className="relative overflow-hidden rounded-20 px-8 py-10 text-white"
           style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
         >
-          {/* Background pattern */}
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #E69900 0%, transparent 50%), radial-gradient(circle at 80% 50%, #507ABE 0%, transparent 50%)" }} />
           <div className="relative flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-right">
             <div>
@@ -190,30 +189,27 @@ export default async function HomePage() {
 
       {/* ── CATEGORIES WITH REAL IMAGES ────────────────────────── */}
       {categoryCards.length > 0 && (
-        <section className="border-t border-white/8 bg-[#111111] py-12">
+        <section className="border-t border-gray-200 bg-gray-50 py-12 dark:border-white/8 dark:bg-[#111111]">
           <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
             <div className="mb-7 flex items-center gap-3">
               <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-              <h2 className="text-xl font-black text-white">קנה לפי קטגוריה</h2>
+              <h2 className="text-xl font-black text-gray-900 dark:text-white">קנה לפי קטגוריה</h2>
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {categoryCards.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={`/products?category=${cat.slug}`}
-                  className="group relative overflow-hidden rounded-16 bg-[#1a1a1a]"
+                  className="group relative overflow-hidden rounded-16 bg-gray-200 dark:bg-[#1a1a1a]"
                   style={{ aspectRatio: "3/4" }}
                 >
-                  {/* Product image */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={cat.image}
                     alt={cat.name}
                     className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                   />
-                  {/* Dark gradient overlay */}
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2) 70%, transparent 100%)" }} />
-                  {/* Category name */}
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="text-sm font-black text-white">{cat.name}</p>
                     <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-[#E69900] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
@@ -228,7 +224,7 @@ export default async function HomePage() {
       )}
 
       {/* ── TRUST STRIP ─────────────────────────────────────────── */}
-      <section className="border-y border-white/8 bg-[#0a0a0a] py-8">
+      <section className="border-y border-gray-200 bg-white py-8 dark:border-white/8 dark:bg-[#0a0a0a]">
         <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {[
@@ -239,7 +235,7 @@ export default async function HomePage() {
             ].map((item) => (
               <div key={item.title} className="flex flex-col items-center gap-2 text-center">
                 <span className="text-2xl">{item.icon}</span>
-                <p className="text-sm font-bold text-white">{item.title}</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white">{item.title}</p>
                 <p className="text-xs text-gray-500">{item.sub}</p>
               </div>
             ))}
@@ -253,10 +249,10 @@ export default async function HomePage() {
           <div className="mb-7 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-7 w-1.5 rounded-full bg-[#507ABE]" />
-              <h2 className="text-xl font-black text-white">חדש בחנות</h2>
+              <h2 className="text-xl font-black text-gray-900 dark:text-white">חדש בחנות</h2>
               <span className="rounded-4 bg-[#507ABE] px-2 py-0.5 text-[10px] font-black text-white">NEW</span>
             </div>
-            <Link href="/products" className="flex items-center gap-1 text-sm font-semibold text-[#507ABE] hover:text-white">
+            <Link href="/products" className="flex items-center gap-1 text-sm font-semibold text-[#507ABE] hover:text-[#3a5a9e]">
               לכל המוצרים ←
             </Link>
           </div>
@@ -294,13 +290,13 @@ export default async function HomePage() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────────────── */}
-      <section className="border-t border-white/8 bg-[#111111] py-14">
+      <section className="border-t border-gray-200 bg-gray-50 py-14 dark:border-white/8 dark:bg-[#111111]">
         <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
           <div className="mb-8 flex items-center gap-3">
             <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-            <h2 className="text-xl font-black text-white">שאלות נפוצות</h2>
+            <h2 className="text-xl font-black text-gray-900 dark:text-white">שאלות נפוצות</h2>
           </div>
-          <div className="mx-auto max-w-2xl divide-y divide-white/8">
+          <div className="mx-auto max-w-2xl divide-y divide-gray-200 dark:divide-white/8">
             {[
               { q: "כמה זמן לוקח המשלוח?", a: "משלוח רגיל 3–5 ימי עסקים. משלוח מהיר 1–2 ימים. כל ההזמנות נשלחות עם מספר מעקב." },
               { q: "האם ניתן להחזיר מוצר?", a: "כן. החזרה חינמית תוך 30 יום מקבלת החבילה, בתנאי שהמוצר לא נעשה שימוש ועם התגים המקוריים." },
@@ -308,13 +304,13 @@ export default async function HomePage() {
               { q: "איך בוחרים מידה נכונה?", a: "בכל עמוד מוצר יש מדריך מידות מפורט. בספק — הזמינו מידה אחת גדולה יותר, אנחנו מחליפים ללא עלות." },
             ].map((faq) => (
               <details key={faq.q} className="group py-4">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-white">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-gray-900 dark:text-white">
                   {faq.q}
-                  <svg className="h-4 w-4 flex-shrink-0 text-gray-500 transition-transform group-open:rotate-180" viewBox="0 0 16 16" fill="currentColor">
+                  <svg className="h-4 w-4 flex-shrink-0 text-gray-400 transition-transform group-open:rotate-180" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 10.293L2.854 5.146a.5.5 0 0 0-.708.708l5.5 5.5a.5.5 0 0 0 .708 0l5.5-5.5a.5.5 0 0 0-.708-.708L8 10.293z" />
                   </svg>
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400">{faq.a}</p>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{faq.a}</p>
               </details>
             ))}
           </div>

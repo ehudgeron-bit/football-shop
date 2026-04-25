@@ -32,14 +32,14 @@ export default async function MysteryBoxPage() {
   const price = Number(product.basePrice);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]" dir="rtl">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a0a]" dir="rtl">
       {/* Breadcrumb */}
-      <div className="border-b border-white/8 bg-[#111111] px-4 py-3 sm:px-6">
+      <div className="border-b border-gray-200 bg-gray-50 px-4 py-3 dark:border-white/8 dark:bg-[#111111] sm:px-6">
         <div className="mx-auto max-w-screen-lg">
           <nav className="flex items-center gap-2 text-xs text-gray-500">
-            <Link href="/" className="hover:text-white">ראשי</Link>
+            <Link href="/" className="hover:text-gray-900 dark:hover:text-white">ראשי</Link>
             <span>/</span>
-            <span className="text-gray-300">קופסת מסתורין</span>
+            <span className="text-gray-700 dark:text-gray-300">קופסת מסתורין</span>
           </nav>
         </div>
       </div>
@@ -51,16 +51,15 @@ export default async function MysteryBoxPage() {
           <div className="flex flex-col gap-4">
             {/* Main image */}
             <div className="relative overflow-hidden rounded-20">
-              {/* Gold glow */}
               <div
-                className="absolute inset-0 opacity-25 blur-3xl"
+                className="absolute inset-0 opacity-15 blur-3xl dark:opacity-25"
                 style={{ background: "radial-gradient(circle at 50% 40%, #E69900 0%, transparent 65%)" }}
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/mystery-box.jpeg"
                 alt="קופסת מסתורין נבחרות מונדיאל"
-                className="relative w-full rounded-20 object-cover"
+                className="relative w-full rounded-20 object-cover shadow-xl"
                 style={{ aspectRatio: "4/5", objectPosition: "center" }}
               />
 
@@ -84,7 +83,7 @@ export default async function MysteryBoxPage() {
             <img
               src="/images/mystery-box-promo.jpeg"
               alt="Mystery Box Promo"
-              className="w-full rounded-16 object-cover"
+              className="w-full rounded-16 object-cover shadow-md"
               style={{ maxHeight: 200, objectPosition: "center top" }}
             />
           </div>
@@ -96,17 +95,17 @@ export default async function MysteryBoxPage() {
               <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[#E69900]">
                 🏆 מונדיאל 2026 · מהדורה מוגבלת
               </p>
-              <h1 className="text-3xl font-black leading-tight text-white">
+              <h1 className="text-3xl font-black leading-tight text-gray-900 dark:text-white">
                 קופסת מסתורין<br />
                 <span className="text-[#E69900]">נבחרות עולם</span>
               </h1>
-              <p className="mt-2 text-sm leading-relaxed text-gray-400">
+              <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                 הזמן וקבל חולצת נבחרת מקורית בהפתעה — אחת מתוך 13 הנבחרות הגדולות ביותר
                 במונדיאל 2026. החולצה תבחר אקראית ותישלח ישירות אליך.
               </p>
               <div className="mt-4 flex items-baseline gap-3">
                 <span className="text-4xl font-black text-[#E69900]">₪{price}</span>
-                <span className="text-sm text-gray-500 line-through">₪{Math.round(price * 1.3)}</span>
+                <span className="text-sm text-gray-400 line-through">₪{Math.round(price * 1.3)}</span>
                 <span className="rounded-4 bg-[#cf2e2e] px-2 py-0.5 text-xs font-black text-white">
                   חיסכון של ₪{Math.round(price * 0.3)}
                 </span>
@@ -114,16 +113,16 @@ export default async function MysteryBoxPage() {
             </div>
 
             {/* What's inside */}
-            <div className="rounded-16 border border-white/10 bg-white/5 p-5">
-              <p className="mb-4 text-sm font-black text-white">מה מקבלים בקופסה?</p>
+            <div className="rounded-16 border border-gray-200 bg-gray-50 p-5 dark:border-white/10 dark:bg-white/5">
+              <p className="mb-4 text-sm font-black text-gray-900 dark:text-white">מה מקבלים בקופסה?</p>
               <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
                 {nations.map((n) => (
                   <div
                     key={n.name}
-                    className="flex flex-col items-center gap-1 rounded-10 border border-white/8 bg-white/5 py-2 px-1 text-center"
+                    className="flex flex-col items-center gap-1 rounded-10 border border-gray-200 bg-white py-2 px-1 text-center dark:border-white/8 dark:bg-white/5"
                   >
                     <span className="text-xl leading-none">{n.flag}</span>
-                    <span className="text-[9px] font-semibold leading-tight text-gray-400">
+                    <span className="text-[9px] font-semibold leading-tight text-gray-500 dark:text-gray-400">
                       {n.name}
                     </span>
                   </div>
@@ -147,7 +146,7 @@ export default async function MysteryBoxPage() {
         </div>
 
         {/* ── Bottom: Why mystery box? ── */}
-        <div className="mt-16 grid grid-cols-1 gap-6 border-t border-white/8 pt-12 sm:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-6 border-t border-gray-200 pt-12 dark:border-white/8 sm:grid-cols-3">
           {[
             {
               icon: "🎁",
@@ -167,11 +166,11 @@ export default async function MysteryBoxPage() {
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-16 border border-white/10 bg-white/5 p-6"
+              className="rounded-16 border border-gray-200 bg-gray-50 p-6 dark:border-white/10 dark:bg-white/5"
             >
               <span className="text-3xl">{item.icon}</span>
-              <p className="mt-3 text-sm font-black text-white">{item.title}</p>
-              <p className="mt-2 text-xs leading-relaxed text-gray-400">{item.text}</p>
+              <p className="mt-3 text-sm font-black text-gray-900 dark:text-white">{item.title}</p>
+              <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-400">{item.text}</p>
             </div>
           ))}
         </div>

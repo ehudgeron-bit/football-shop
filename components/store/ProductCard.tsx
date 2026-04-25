@@ -31,7 +31,10 @@ export function ProductCard({ product }: ProductCardProps) {
       aria-label={product.name}
     >
       {/* Image */}
-      <div className="relative overflow-hidden bg-surface-secondary" style={{ aspectRatio: "3/4", borderRadius: "var(--rounded-corners-radius)" }}>
+      <div
+        className="relative overflow-hidden bg-gray-100 dark:bg-[#1a1a1a]"
+        style={{ aspectRatio: "3/4", borderRadius: "var(--rounded-corners-radius)" }}
+      >
         {primaryImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -40,7 +43,7 @@ export function ProductCard({ product }: ProductCardProps) {
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-text-muted">
+          <div className="flex h-full items-center justify-center text-gray-300 dark:text-gray-600">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <circle cx="24" cy="24" r="20" stroke="#ccc" strokeWidth="2" />
               <circle cx="24" cy="24" r="8" fill="#ddd" />
@@ -52,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Out of stock overlay */}
         {!hasStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <span className="rounded-pill bg-white px-3 py-1 text-xs font-bold text-text-primary">
+            <span className="rounded-pill bg-white px-3 py-1 text-xs font-bold text-gray-900">
               אזל מהמלאי
             </span>
           </div>
@@ -83,8 +86,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Hover CTA */}
         {hasStock && (
-          <div className="absolute bottom-0 left-0 right-0 translate-y-full py-2.5 text-center text-xs font-semibold text-white transition-transform duration-200 group-hover:translate-y-0"
-            style={{ background: "var(--color-add-to-cart-background)" }}>
+          <div
+            className="absolute bottom-0 left-0 right-0 translate-y-full py-2.5 text-center text-xs font-semibold text-white transition-transform duration-200 group-hover:translate-y-0"
+            style={{ background: "var(--color-add-to-cart-background)" }}
+          >
             בחר מידה ➜
           </div>
         )}
@@ -93,9 +98,9 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Info */}
       <div className="mt-3 flex flex-col gap-0.5">
         {product.team && (
-          <p className="text-xs font-medium text-gray-400">{product.team.name}</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{product.team.name}</p>
         )}
-        <p className="text-sm font-semibold leading-snug text-white line-clamp-2">
+        <p className="text-sm font-semibold leading-snug text-gray-900 dark:text-white line-clamp-2">
           {product.name}
         </p>
 
@@ -103,7 +108,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="mt-1 flex items-center gap-2">
           <p className="text-base font-bold text-[#E69900]">{formatPrice(minPrice)}</p>
           {compareAt && compareAt > minPrice && (
-            <p className="text-sm text-gray-500 line-through">{formatPrice(compareAt)}</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 line-through">{formatPrice(compareAt)}</p>
           )}
         </div>
       </div>
@@ -114,10 +119,10 @@ export function ProductCard({ product }: ProductCardProps) {
 export function ProductCardSkeleton() {
   return (
     <div className="flex animate-pulse flex-col gap-3">
-      <div className="rounded-12 bg-surface-secondary" style={{ aspectRatio: "3/4" }} />
-      <div className="h-2.5 w-1/3 rounded bg-surface-secondary" />
-      <div className="h-4 w-4/5 rounded bg-surface-secondary" />
-      <div className="h-4 w-1/4 rounded bg-surface-secondary" />
+      <div className="rounded-12 bg-gray-100 dark:bg-[#1a1a1a]" style={{ aspectRatio: "3/4" }} />
+      <div className="h-2.5 w-1/3 rounded bg-gray-100 dark:bg-[#1a1a1a]" />
+      <div className="h-4 w-4/5 rounded bg-gray-100 dark:bg-[#1a1a1a]" />
+      <div className="h-4 w-1/4 rounded bg-gray-100 dark:bg-[#1a1a1a]" />
     </div>
   );
 }

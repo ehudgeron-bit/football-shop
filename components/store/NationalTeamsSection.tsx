@@ -62,13 +62,13 @@ export async function NationalTeamsSection() {
   if (teams.length === 0) return null;
 
   return (
-    <section className="border-t border-white/8 bg-[#0d0d0d] py-14">
+    <section className="border-t border-gray-200 bg-white py-14 dark:border-white/8 dark:bg-[#0d0d0d]">
       <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-            <h2 className="text-xl font-black text-white">נבחרות מונדיאל 2026</h2>
+            <h2 className="text-xl font-black text-gray-900 dark:text-white">נבחרות מונדיאל 2026</h2>
             <span className="rounded-4 bg-[#E69900] px-2 py-0.5 text-[10px] font-black text-black">
               {teams.length} נבחרות
             </span>
@@ -87,7 +87,7 @@ export async function NationalTeamsSection() {
             <Link
               key={team.slug}
               href={`/products?q=${encodeURIComponent(team.name)}`}
-              className="group relative overflow-hidden rounded-16 bg-[#1a1a1a]"
+              className="group relative overflow-hidden rounded-16 bg-gray-100 dark:bg-[#1a1a1a]"
               style={{ aspectRatio: "3/4" }}
             >
               {/* Jersey image */}

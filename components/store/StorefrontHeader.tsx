@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import { CartCount } from "./CartCount";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function StorefrontHeader() {
   const { data: session } = useSession();
@@ -15,24 +16,25 @@ export function StorefrontHeader() {
     { href: "/products?category=national-teams", label: "נבחרות" },
     { href: "/products?category=match-jerseys", label: "חולצות משחק" },
     { href: "/products?featured=true", label: "מבצעים" },
-    { href: "/mystery-box", label: "🎁 קופסת מסתורין" },
+    { href: "/mystery-box", label: "🎁 מסתורין" },
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/8 bg-[#0a0a0a] shadow-lg shadow-black/30">
+    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white shadow-sm dark:border-white/8 dark:bg-[#0a0a0a] dark:shadow-black/30">
       <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between gap-4">
 
           {/* ── Left: actions ── */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <CartCount />
+            <ThemeToggle />
 
             {session ? (
               <>
                 <Link
                   href="/account"
                   aria-label="חשבון"
-                  className="hidden rounded-pill p-2 text-gray-400 transition hover:bg-white/8 hover:text-white sm:block"
+                  className="hidden rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/8 dark:hover:text-white sm:block"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -49,7 +51,7 @@ export function StorefrontHeader() {
                 )}
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="hidden rounded-pill bg-white/8 px-4 py-2 text-sm font-medium text-gray-300 transition hover:bg-white/15 hover:text-white sm:block"
+                  className="hidden rounded-pill bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200 dark:bg-white/8 dark:text-gray-300 dark:hover:bg-white/15 dark:hover:text-white sm:block"
                 >
                   התנתק
                 </button>
@@ -58,7 +60,7 @@ export function StorefrontHeader() {
               <>
                 <Link
                   href="/login"
-                  className="hidden text-sm font-medium text-gray-400 transition hover:text-white sm:block"
+                  className="hidden text-sm font-medium text-gray-500 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:block"
                 >
                   כניסה
                 </Link>
@@ -76,7 +78,7 @@ export function StorefrontHeader() {
 
             {/* Mobile toggle */}
             <button
-              className="rounded-8 p-2 text-gray-400 md:hidden"
+              className="rounded-8 p-2 text-gray-500 dark:text-gray-400 md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="תפריט"
             >
@@ -91,12 +93,12 @@ export function StorefrontHeader() {
           </div>
 
           {/* ── Center: nav ── */}
-          <nav className="hidden items-center gap-5 md:flex" aria-label="ניווט ראשי">
+          <nav className="hidden items-center gap-4 md:flex" aria-label="ניווט ראשי">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-gray-400 transition hover:text-white"
+                className="text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
                 {link.label}
               </Link>
@@ -106,7 +108,7 @@ export function StorefrontHeader() {
           {/* ── Right: logo ── */}
           <Link
             href="/"
-            className="flex flex-shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight text-white"
+            className="flex flex-shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight text-gray-900 dark:text-white"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E69900] text-base font-black text-black">⚽</span>
             <span>Football Shop</span>
@@ -116,13 +118,13 @@ export function StorefrontHeader() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <nav className="border-t border-white/8 bg-[#111111] px-4 py-4 md:hidden">
+        <nav className="border-t border-gray-200 bg-white px-4 py-4 dark:border-white/8 dark:bg-[#111111] md:hidden">
           <ul className="flex flex-col gap-4">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm font-semibold text-white"
+                  className="text-sm font-semibold text-gray-900 dark:text-white"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
@@ -131,12 +133,12 @@ export function StorefrontHeader() {
             ))}
             {session ? (
               <>
-                <li><Link href="/account" className="text-sm text-gray-400" onClick={() => setMobileMenuOpen(false)}>חשבון</Link></li>
-                <li><button onClick={() => signOut({ callbackUrl: "/" })} className="text-sm text-gray-400">התנתק</button></li>
+                <li><Link href="/account" className="text-sm text-gray-500 dark:text-gray-400" onClick={() => setMobileMenuOpen(false)}>חשבון</Link></li>
+                <li><button onClick={() => signOut({ callbackUrl: "/" })} className="text-sm text-gray-500 dark:text-gray-400">התנתק</button></li>
               </>
             ) : (
               <>
-                <li><Link href="/login" className="text-sm text-gray-400" onClick={() => setMobileMenuOpen(false)}>כניסה</Link></li>
+                <li><Link href="/login" className="text-sm text-gray-500 dark:text-gray-400" onClick={() => setMobileMenuOpen(false)}>כניסה</Link></li>
                 <li><Link href="/register" className="text-sm font-bold text-[#E69900]" onClick={() => setMobileMenuOpen(false)}>הרשמה</Link></li>
               </>
             )}

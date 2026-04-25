@@ -73,7 +73,7 @@ export function MysteryBoxOrderClient({ variants, price }: Props) {
     <div className="flex flex-col gap-6">
       {/* Size picker */}
       <div>
-        <p className="mb-3 text-sm font-bold text-white">בחר מידה</p>
+        <p className="mb-3 text-sm font-bold text-gray-900 dark:text-white">בחר מידה</p>
         <div className="flex flex-wrap gap-2">
           {sorted.map((v) => {
             const isSelected = v.size === selectedSize;
@@ -84,8 +84,8 @@ export function MysteryBoxOrderClient({ variants, price }: Props) {
                 className={[
                   "h-12 min-w-[3.5rem] rounded-12 border px-4 text-sm font-bold transition-all duration-150",
                   isSelected
-                    ? "border-[#E69900] bg-[#E69900] text-black shadow-lg shadow-[#E69900]/30"
-                    : "border-white/20 bg-white/5 text-gray-300 hover:border-[#E69900]/60 hover:text-white",
+                    ? "border-[#E69900] bg-[#E69900] text-black shadow-lg"
+                    : "border-gray-300 bg-white text-gray-700 hover:border-[#E69900] dark:border-white/20 dark:bg-white/5 dark:text-gray-300 dark:hover:border-[#E69900]/60",
                 ].join(" ")}
                 aria-pressed={isSelected}
               >
@@ -95,45 +95,45 @@ export function MysteryBoxOrderClient({ variants, price }: Props) {
           })}
         </div>
         {sizeError && (
-          <p className="mt-2 text-xs font-semibold text-red-400">נא לבחור מידה לפני ההזמנה</p>
+          <p className="mt-2 text-xs font-semibold text-red-500">נא לבחור מידה לפני ההזמנה</p>
         )}
       </div>
 
       {/* Quantity */}
       <div>
-        <p className="mb-3 text-sm font-bold text-white">כמות</p>
+        <p className="mb-3 text-sm font-bold text-gray-900 dark:text-white">כמות</p>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-lg text-white transition hover:border-white/40"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-gray-100 text-lg text-gray-700 transition hover:bg-gray-200 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
           >
             −
           </button>
-          <span className="w-6 text-center text-lg font-bold text-white">{quantity}</span>
+          <span className="w-6 text-center text-lg font-bold text-gray-900 dark:text-white">{quantity}</span>
           <button
             onClick={() => setQuantity((q) => Math.min(5, q + 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-lg text-white transition hover:border-white/40"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-gray-100 text-lg text-gray-700 transition hover:bg-gray-200 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
           >
             +
           </button>
-          <span className="text-sm text-gray-400">מקסימום 5 יחידות</span>
+          <span className="text-sm text-gray-500">מקסימום 5 יחידות</span>
         </div>
       </div>
 
       {/* Price summary */}
-      <div className="rounded-16 border border-white/10 bg-white/5 p-4">
-        <div className="flex items-center justify-between text-sm text-gray-400">
+      <div className="rounded-16 border border-gray-200 bg-gray-50 p-4 dark:border-white/10 dark:bg-white/5">
+        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
           <span>מחיר ליחידה</span>
-          <span className="font-semibold text-white">{formatPrice(price)}</span>
+          <span className="font-semibold text-gray-900 dark:text-white">{formatPrice(price)}</span>
         </div>
         {quantity > 1 && (
-          <div className="mt-2 flex items-center justify-between text-sm text-gray-400">
+          <div className="mt-2 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
             <span>כמות</span>
-            <span className="font-semibold text-white">× {quantity}</span>
+            <span className="font-semibold text-gray-900 dark:text-white">× {quantity}</span>
           </div>
         )}
-        <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
-          <span className="text-base font-bold text-white">סה״כ</span>
+        <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-white/10">
+          <span className="text-base font-bold text-gray-900 dark:text-white">סה״כ</span>
           <span className="text-xl font-black text-[#E69900]">{formatPrice(total)}</span>
         </div>
       </div>
@@ -143,14 +143,14 @@ export function MysteryBoxOrderClient({ variants, price }: Props) {
         <button
           onClick={() => addToCart(true)}
           disabled={loading}
-          className="w-full rounded-pill bg-[#E69900] py-4 text-sm font-black text-black shadow-lg shadow-[#E69900]/20 transition hover:bg-[#cc8800] disabled:opacity-60"
+          className="w-full rounded-pill bg-[#E69900] py-4 text-sm font-black text-black shadow-lg transition hover:bg-[#cc8800] disabled:opacity-60"
         >
           {loading ? "מעבד..." : "הזמן עכשיו ←"}
         </button>
         <button
           onClick={() => addToCart(false)}
           disabled={loading}
-          className="w-full rounded-pill border border-white/20 bg-white/5 py-3.5 text-sm font-bold text-white transition hover:bg-white/10 disabled:opacity-60"
+          className="w-full rounded-pill border border-gray-300 bg-white py-3.5 text-sm font-bold text-gray-700 transition hover:bg-gray-100 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 disabled:opacity-60"
         >
           הוסף לסל הקניות
         </button>

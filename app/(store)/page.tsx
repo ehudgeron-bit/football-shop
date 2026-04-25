@@ -7,14 +7,14 @@ import { WorldCupHero } from "@/components/store/WorldCupHero";
 export const dynamic = "force-dynamic";
 
 const nations = [
-  { name: "ארגנטינה", q: "ארגנטינה" },
-  { name: "ברזיל",    q: "ברזיל" },
-  { name: "צרפת",     q: "צרפת" },
-  { name: "ספרד",     q: "ספרד" },
-  { name: "גרמניה",   q: "גרמניה" },
-  { name: "אנגליה",   q: "אנגליה" },
-  { name: "פורטוגל",  q: "פורטוגל" },
-  { name: "הולנד",    q: "הולנד" },
+  { name: "ארגנטינה", q: "ארגנטינה", flag: "🇦🇷" },
+  { name: "ברזיל",    q: "ברזיל",    flag: "🇧🇷" },
+  { name: "צרפת",     q: "צרפת",     flag: "🇫🇷" },
+  { name: "ספרד",     q: "ספרד",     flag: "🇪🇸" },
+  { name: "גרמניה",   q: "גרמניה",   flag: "🇩🇪" },
+  { name: "אנגליה",   q: "אנגליה",   flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+  { name: "פורטוגל",  q: "פורטוגל",  flag: "🇵🇹" },
+  { name: "הולנד",    q: "הולנד",    flag: "🇳🇱" },
 ];
 
 async function getData() {
@@ -98,6 +98,7 @@ export default async function HomePage() {
                     />
                   )}
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 55%)" }} />
+                  <div className="absolute right-1.5 top-1.5 text-base drop-shadow">{nation.flag}</div>
                   <p className="absolute bottom-0 left-0 right-0 p-2 text-center text-[10px] font-bold text-white">
                     {nation.name}
                   </p>

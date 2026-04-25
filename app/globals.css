@@ -2,163 +2,167 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
 
+/* ─── Design tokens ─────────────────────────────────────────── */
 :root {
-  /* Design tokens */
-  --rounded-corners-radius: 16px;
-  --add-to-cart-rounded-corners-radius: 16px;
-  --color-add-to-cart-background: #333333;
-  --color-add-to-cart-text: #FFFFFF;
-  --color-add-to-cart-border: #333333;
-  --color-add-to-cart-background-hover: #4F4F4F;
-  --color-add-to-cart-border-hover: #4F4F4F;
-  --color-button-background: #333333;
-  --color-button-text: #FFFFFF;
-  --color-button-background-hover: #4F4F4F;
-  --color-headers-background: #F4F4F4;
-  --e-global-color-primary: #000000;
-  --e-global-color-secondary: #507ABE;
-  --e-global-color-text: #404040;
+  --accent:        #E69900;
+  --accent-dark:   #cc8800;
+  --black:         #0a0a0a;
+  --white:         #ffffff;
+  --gray-50:       #fafafa;
+  --gray-100:      #f4f4f5;
+  --gray-200:      #e4e4e7;
+  --gray-400:      #a1a1aa;
+  --gray-600:      #52525b;
+  --gray-900:      #18181b;
+
+  --font-heebo: 'Heebo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --rounded-corners-radius: 12px;
+  --add-to-cart-rounded-corners-radius: 12px;
+  --color-add-to-cart-background: #0a0a0a;
+  --color-add-to-cart-text: #ffffff;
+  --color-add-to-cart-border: #0a0a0a;
+  --color-add-to-cart-background-hover: #333;
+  --color-add-to-cart-border-hover: #333;
+  --color-button-background: #0a0a0a;
+  --color-button-text: #ffffff;
+  --color-button-background-hover: #333;
+  --color-headers-background: #fafafa;
+  --e-global-color-primary: #0a0a0a;
+  --e-global-color-secondary: #0a0a0a;
+  --e-global-color-text: #52525b;
   --e-global-color-accent: #E69900;
-
-  --font-heebo: 'Heebo', sans-serif;
-
-  /* Theme tokens — light mode */
-  --bg-page: #ffffff;
-  --bg-section: #f8f9fa;
-  --bg-card: #ffffff;
-  --bg-header: #ffffff;
-  --text-base: #0a0a0a;
-  --text-sub: #4b5563;
-  --text-muted: #9ca3af;
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-card: #e5e7eb;
 }
 
 .dark {
-  --bg-page: #0a0a0a;
-  --bg-section: #111111;
-  --bg-card: #1a1a1a;
-  --bg-header: #0a0a0a;
-  --text-base: #ffffff;
-  --text-sub: #d1d5db;
-  --text-muted: #6b7280;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-card: rgba(255, 255, 255, 0.10);
+  --black:   #ffffff;
+  --white:   #0a0a0a;
+  --gray-50:  #111111;
+  --gray-100: #1c1c1c;
+  --gray-200: #2a2a2a;
+  --gray-400: #71717a;
+  --gray-600: #a1a1aa;
+  --gray-900: #f4f4f5;
 }
 
+/* ─── Base ──────────────────────────────────────────────────── */
 html {
   direction: rtl;
-  font-family: var(--font-heebo), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-heebo);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  background-color: var(--bg-page);
-  color: var(--text-base);
-  font-size: 1rem;
-  font-weight: 400;
+  background-color: var(--white);
+  color: var(--black);
+  font-size: 16px;
   line-height: 1.5;
+  font-weight: 400;
 }
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
 
   body {
-    background-color: var(--bg-page);
-    color: var(--text-base);
+    background-color: var(--white);
+    color: var(--black);
     min-height: 100vh;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
-    color: var(--text-base);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--black);
   }
+
+  a { text-decoration: none; }
 
   *:focus-visible {
-    @apply outline-none ring-2 ring-brand-secondary ring-offset-2;
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 }
 
+/* ─── Utility overrides ─────────────────────────────────────── */
 @layer components {
+  /* Input */
   .input-base {
-    @apply w-full border bg-white px-4 py-3
-           text-text-primary placeholder:text-text-muted
-           transition-colors duration-150
-           focus:outline-none
-           disabled:bg-surface-secondary disabled:cursor-not-allowed;
-    border-color: rgba(32, 7, 7, 0.8);
-    border-radius: 4px;
-    border-width: 1px;
-  }
-  .dark .input-base {
-    background: #1a1a1a;
-    color: #ffffff;
-  }
-  .input-base:focus {
-    border-color: var(--e-global-color-secondary);
-    box-shadow: 0 0 0 2px rgba(80,122,190,0.15);
-  }
-
-  .badge {
-    @apply inline-block text-xs font-medium px-2 py-0.5;
-    border-radius: 4px;
-  }
-  .badge-orange { @apply badge bg-orange-50 text-orange-600; }
-  .badge-green  { @apply badge bg-green-50 text-green-700; }
-
-  .wc-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: var(--rounded-corners-radius);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .wc-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  }
-
-  .btn-primary {
-    background: var(--color-add-to-cart-background);
-    color: var(--color-add-to-cart-text);
-    border: 1px solid var(--color-add-to-cart-border);
-    border-radius: var(--add-to-cart-rounded-corners-radius);
-    padding: 0.75rem 2rem;
-    font-weight: 600;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
     font-size: 0.875rem;
-    transition: background 0.15s, border-color 0.15s;
-    cursor: pointer;
+    color: var(--black);
+    transition: border-color 0.15s ease;
+  }
+  .input-base::placeholder { color: var(--gray-400); }
+  .input-base:focus {
+    outline: none;
+    border-color: var(--black);
+  }
+
+  /* Buttons */
+  .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    background: var(--black);
+    color: var(--white);
+    border: 1px solid var(--black);
+    border-radius: 100px;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
   }
-  .btn-primary:hover {
-    background: var(--color-add-to-cart-background-hover);
-    border-color: var(--color-add-to-cart-border-hover);
-  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.98); }
 
   .btn-secondary {
-    background: var(--bg-card);
-    color: #333333;
-    border: 1px solid #333333;
-    border-radius: var(--rounded-corners-radius);
-    padding: 0.75rem 2rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: background 0.15s;
-    cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    background: transparent;
+    color: var(--black);
+    border: 1px solid var(--gray-200);
+    border-radius: 100px;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
   }
-  .btn-secondary:hover { background: var(--bg-section); }
+  .btn-secondary:hover { border-color: var(--black); background: var(--gray-50); }
+
+  /* Card base */
+  .wc-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+  }
+
+  /* Badges */
+  .badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; padding: 0.125rem 0.5rem; border-radius: 100px; }
+  .badge-sale  { background: var(--black); color: var(--white); }
+  .badge-new   { background: var(--accent); color: var(--black); }
 }
 
-.price {
-  direction: ltr;
-  unicode-bidi: embed;
-}
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+/* ─── Price direction ───────────────────────────────────────── */
+.price { direction: ltr; unicode-bidi: embed; }
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection { background: var(--accent); color: var(--black); }

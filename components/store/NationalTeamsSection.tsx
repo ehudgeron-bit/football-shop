@@ -2,23 +2,10 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 const teamFlags: Record<string, string> = {
-  ארגנטינה: "🇦🇷",
-  ברזיל: "🇧🇷",
-  צרפת: "🇫🇷",
-  ספרד: "🇪🇸",
-  גרמניה: "🇩🇪",
-  אנגליה: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  פורטוגל: "🇵🇹",
-  הולנד: "🇳🇱",
-  קולומביה: "🇨🇴",
-  מרוקו: "🇲🇦",
-  איטליה: "🇮🇹",
-  בלגיה: "🇧🇪",
-  מקסיקו: "🇲🇽",
-  קוראסאו: "🇨🇼",
-  ארהב: "🇺🇸",
-  קנדה: "🇨🇦",
-  יפן: "🇯🇵",
+  ארגנטינה: "🇦🇷", ברזיל: "🇧🇷", צרפת: "🇫🇷", ספרד: "🇪🇸",
+  גרמניה: "🇩🇪", אנגליה: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", פורטוגל: "🇵🇹", הולנד: "🇳🇱",
+  קולומביה: "🇨🇴", מרוקו: "🇲🇦", איטליה: "🇮🇹", בלגיה: "🇧🇪",
+  מקסיקו: "🇲🇽", קוראסאו: "🇨🇼", ארהב: "🇺🇸", קנדה: "🇨🇦",
 };
 
 async function getNationalTeams() {
@@ -39,7 +26,6 @@ async function getNationalTeams() {
         },
         _count: { select: { products: { where: catFilter } } },
       },
-      orderBy: { name: "asc" },
     });
 
     return teams
@@ -62,67 +48,47 @@ export async function NationalTeamsSection() {
   if (teams.length === 0) return null;
 
   return (
-    <section className="border-t border-gray-200 bg-white py-14 dark:border-white/8 dark:bg-[#0d0d0d]">
-      <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-            <h2 className="text-xl font-black text-gray-900 dark:text-white">נבחרות מונדיאל 2026</h2>
-            <span className="rounded-4 bg-[#E69900] px-2 py-0.5 text-[10px] font-black text-black">
-              {teams.length} נבחרות
-            </span>
+    <section className="border-t border-[#f4f4f5] px-6 py-20 dark:border-[#1c1c1c] sm:py-24">
+      <div className="mx-auto max-w-screen-xl">
+        <div className="mb-10 flex items-end justify-between">
+          <div>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#a1a1aa]">National Teams</p>
+            <h2 className="text-2xl font-black text-[#18181b] dark:text-white sm:text-3xl" style={{ letterSpacing: "-0.02em" }}>
+              נבחרות מונדיאל 2026
+            </h2>
           </div>
-          <Link
-            href="/products?category=national-teams"
-            className="text-sm font-semibold text-[#E69900] hover:text-[#cc8800]"
-          >
-            לכל הנבחרות ←
+          <Link href="/products?category=national-teams" className="text-sm font-medium text-[#a1a1aa] transition hover:text-[#18181b] dark:hover:text-white">
+            הכל ←
           </Link>
         </div>
 
-        {/* Team grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-5">
           {teams.map((team) => (
             <Link
               key={team.slug}
               href={`/products?q=${encodeURIComponent(team.name)}`}
-              className="group relative overflow-hidden rounded-16 bg-gray-100 dark:bg-[#1a1a1a]"
-              style={{ aspectRatio: "3/4" }}
+              className="group relative overflow-hidden bg-[#f4f4f5] dark:bg-[#161616]"
+              style={{ aspectRatio: "3/4", borderRadius: 16 }}
             >
-              {/* Jersey image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={team.image}
                 alt={team.name}
-                className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)" }} />
 
-              {/* Dark gradient overlay */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(0,0,0,0.90) 30%, rgba(0,0,0,0.25) 65%, transparent 100%)",
-                }}
-              />
+              {/* Flag */}
+              <div className="absolute right-3 top-3 text-xl drop-shadow">{team.flag}</div>
 
-              {/* Flag badge top-right */}
-              <div className="absolute right-2 top-2 text-2xl leading-none drop-shadow">
-                {team.flag}
+              {/* Count */}
+              <div className="absolute left-3 top-3 rounded-full bg-black/60 px-2 py-0.5 text-[9px] font-bold text-white/80 backdrop-blur-sm">
+                {team.count}
               </div>
 
-              {/* Product count badge top-left */}
-              <div className="absolute left-2 top-2 rounded-4 bg-black/60 px-1.5 py-0.5 text-[10px] font-bold text-gray-300">
-                {team.count} מוצרים
-              </div>
-
-              {/* Team name bottom */}
+              {/* Name */}
               <div className="absolute bottom-0 left-0 right-0 p-3">
-                <p className="text-sm font-black leading-tight text-white">{team.name}</p>
-                <p className="mt-1 text-[11px] font-semibold text-[#E69900] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                  לצפייה ←
-                </p>
+                <p className="text-xs font-black text-white">{team.name}</p>
               </div>
             </Link>
           ))}

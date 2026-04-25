@@ -1,17 +1,12 @@
 import { StorefrontHeader } from "@/components/store/StorefrontHeader";
 import { StorefrontFooter } from "@/components/store/StorefrontFooter";
-import { AnnouncementBar } from "@/components/store/AnnouncementBar";
 
-export default function StoreLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <AnnouncementBar />
       <StorefrontHeader />
-      <main className="flex-1">{children}</main>
+      {/* No top padding — hero is full-viewport and header is fixed/transparent */}
+      <div className="flex-1">{children}</div>
       <StorefrontFooter />
     </div>
   );

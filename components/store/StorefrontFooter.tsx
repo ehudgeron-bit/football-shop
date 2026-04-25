@@ -1,80 +1,62 @@
 import Link from "next/link";
 
-const cols = [
+const links = [
   {
-    title: "ניווט מהיר",
-    links: [
-      { href: "/products?category=national-teams", label: "חולצות נבחרות" },
-      { href: "/products?category=match-jerseys", label: "חולצות מועדון" },
-      { href: "/products?category=kids", label: "חליפות ילדים" },
-      { href: "/products?category=retro", label: "חולצות עבר" },
+    title: "חנות",
+    items: [
+      { href: "/products", label: "כל המוצרים" },
+      { href: "/products?category=national-teams", label: "נבחרות" },
+      { href: "/products?category=match-jerseys", label: "מועדונים" },
       { href: "/products?featured=true", label: "מבצעים" },
-      { href: "/mystery-box", label: "🎁 קופסת מסתורין" },
+      { href: "/mystery-box", label: "Mystery Box" },
     ],
   },
   {
-    title: "החשבון שלי",
-    links: [
+    title: "חשבון",
+    items: [
       { href: "/login", label: "כניסה" },
       { href: "/register", label: "הרשמה" },
-      { href: "/orders", label: "ההזמנות שלי" },
+      { href: "/orders", label: "הזמנות" },
       { href: "/account", label: "פרופיל" },
     ],
   },
   {
-    title: "שירות לקוחות",
-    links: [
-      { href: "/shipping", label: "מדיניות משלוחים" },
-      { href: "/returns", label: "החזרות והחלפות" },
+    title: "עזרה",
+    items: [
+      { href: "/shipping", label: "משלוחים" },
+      { href: "/returns", label: "החזרות" },
       { href: "/contact", label: "צור קשר" },
-      { href: "/privacy", label: "מדיניות פרטיות" },
-      { href: "/terms", label: "תנאי שימוש" },
+      { href: "/privacy", label: "פרטיות" },
     ],
   },
 ];
 
 export function StorefrontFooter() {
   return (
-    <footer className="bg-[#1a1a1a] text-gray-300">
-      <div className="mx-auto max-w-screen-xl px-4 py-12 sm:px-6">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <footer className="border-t border-[#f4f4f5] bg-white dark:border-[#1c1c1c] dark:bg-[#0a0a0a]">
+      <div className="mx-auto max-w-screen-xl px-6 py-16">
+        <div className="grid grid-cols-2 gap-12 md:grid-cols-4">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E69900] text-xl font-black text-black">⚽</div>
-              <span className="text-base font-extrabold text-white">Football Shop</span>
+          <div>
+            <Link href="/" className="text-xl font-black tracking-tight text-[#18181b] dark:text-white">
+              Football<span className="text-[#E69900]">.</span>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-gray-500">
+            <p className="mt-4 text-xs leading-relaxed text-[#a1a1aa]">
               חולצות כדורגל מקוריות — ליגות, קבוצות ונבחרות מובילות בעולם.
             </p>
-            {/* Social */}
-            <div className="mt-5 flex gap-3">
-              {[
-                { label: "F", name: "Facebook" },
-                { label: "I", name: "Instagram" },
-                { label: "T", name: "TikTok" },
-              ].map((s) => (
-                <span
-                  key={s.name}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-xs font-bold text-gray-400 transition hover:border-gray-500 hover:text-white"
-                >
-                  {s.label}
-                </span>
-              ))}
-            </div>
           </div>
 
-          {/* Link cols */}
-          {cols.map((col) => (
+          {/* Links */}
+          {links.map((col) => (
             <div key={col.title}>
-              <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">
+              <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-[#a1a1aa]">
                 {col.title}
-              </h3>
+              </p>
               <ul className="flex flex-col gap-2.5">
-                {col.links.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-sm text-gray-400 transition hover:text-white">
-                      {link.label}
+                {col.items.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-sm text-[#52525b] transition hover:text-[#18181b] dark:text-[#71717a] dark:hover:text-white">
+                      {item.label}
                     </Link>
                   </li>
                 ))}
@@ -83,20 +65,16 @@ export function StorefrontFooter() {
           ))}
         </div>
 
-        {/* Payment methods */}
-        <div className="mt-10 border-t border-gray-800 pt-8">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-gray-600">אמצעי תשלום:</span>
-              {["Visa", "MC", "PayPal", "Bit"].map((p) => (
-                <span key={p} className="rounded-6 border border-gray-700 bg-gray-800 px-3 py-1 text-xs font-bold text-gray-400">
-                  {p}
-                </span>
-              ))}
-            </div>
-            <p className="text-xs text-gray-600">
-              © {new Date().getFullYear()} Football Shop · כל הזכויות שמורות
-            </p>
+        <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-[#f4f4f5] pt-8 dark:border-[#1c1c1c]">
+          <p className="text-xs text-[#a1a1aa]">
+            © {new Date().getFullYear()} Football. כל הזכויות שמורות.
+          </p>
+          <div className="flex gap-3">
+            {["Visa", "Mastercard", "PayPal", "Bit"].map((p) => (
+              <span key={p} className="rounded-md border border-[#e4e4e7] px-2.5 py-1 text-[10px] font-semibold text-[#a1a1aa] dark:border-[#2a2a2a]">
+                {p}
+              </span>
+            ))}
           </div>
         </div>
       </div>

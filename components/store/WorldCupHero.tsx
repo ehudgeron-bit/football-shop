@@ -6,10 +6,10 @@ async function getHeroImages(): Promise<string[]> {
     const products = await prisma.product.findMany({
       where: { isActive: true, isFeatured: true },
       select: { images: { select: { url: true }, orderBy: { position: "asc" }, take: 1 } },
-      take: 12,
+      take: 8,
       orderBy: { createdAt: "asc" },
     });
-    return products.flatMap((p) => p.images.map((img) => img.url));
+    return products.flatMap((p) => p.images.map((i) => i.url));
   } catch {
     return [];
   }
@@ -19,51 +19,59 @@ export async function WorldCupHero() {
   const images = await getHeroImages();
 
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: 520 }} dir="rtl">
-      {/* Jersey row background — like jerseys hanging */}
-      <div className="absolute inset-0 flex">
-        {images.length > 0 ? (
-          <div className="flex w-full">
-            {[...images, ...images, ...images].slice(0, 14).map((url, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={i}
-                src={url}
-                alt=""
-                aria-hidden
-                className="flex-1 object-cover object-top"
-                style={{ minWidth: 0 }}
-              />
-            ))}
+    <section className="relative overflow-hidden bg-[#0a0a0a]" style={{ height: "100svh", minHeight: 600, maxHeight: 900 }}>
+      {/* Cinematic jersey wall */}
+      {images.length > 0 && (
+        <div className="absolute inset-0 flex">
+          {[...images, ...images].slice(0, 10).map((url, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={i} src={url} alt="" aria-hidden
+              className="flex-1 object-cover object-top"
+              style={{ minWidth: 0 }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Cinematic overlays */}
+      <div className="absolute inset-0 bg-[#0a0a0a]/55" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, #0a0a0a 0%, transparent 60%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to right, transparent 50%, rgba(0,0,0,0.15) 100%)" }} />
+
+      {/* Content — bottom-right aligned (RTL = bottom-right is visually prominent) */}
+      <div className="relative flex h-full flex-col justify-end" dir="rtl">
+        <div className="mx-auto w-full max-w-screen-xl px-8 pb-20 sm:pb-28">
+          <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#E69900]">
+            FIFA World Cup · 2026
+          </p>
+          <h1 className="max-w-xl text-5xl font-black leading-[1.05] text-white sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.025em" }}>
+            חולצות כדורגל<br />
+            <span className="text-white/60">למי שמבין</span>
+          </h1>
+          <p className="mt-5 max-w-xs text-sm font-normal leading-relaxed text-white/50">
+            חולצות מקוריות · 48 נבחרות · משלוח מהיר
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link
+              href="/products"
+              className="rounded-full bg-white px-8 py-3.5 text-sm font-bold text-[#0a0a0a] transition-all duration-200 hover:bg-[#E69900] hover:text-black"
+            >
+              קנה עכשיו
+            </Link>
+            <Link
+              href="/mystery-box"
+              className="text-sm font-medium text-white/60 underline-offset-4 transition hover:text-white hover:underline"
+            >
+              Mystery Box →
+            </Link>
           </div>
-        ) : (
-          <div className="w-full bg-gray-800" />
-        )}
+        </div>
       </div>
 
-      {/* Dark overlay — stronger at bottom for text legibility */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.25) 100%)" }} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 30%)" }} />
-
-      {/* Content */}
-      <div className="relative mx-auto flex max-w-screen-xl flex-col items-center justify-end px-4 pb-16 pt-24 text-center sm:px-6" style={{ minHeight: 520 }}>
-        <h1 className="text-4xl font-black leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
-          חולצות כדורגל למונדיאל 2026
-        </h1>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/products"
-            className="rounded-pill bg-[#E69900] px-10 py-3.5 text-sm font-black text-black shadow-xl transition hover:bg-[#cc8800]"
-          >
-            לקנייה עכשיו
-          </Link>
-          <Link
-            href="/mystery-box"
-            className="rounded-pill border border-white/40 bg-white/10 px-10 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-          >
-            🎁 קופסת מסתורין
-          </Link>
-        </div>
+      {/* Scroll indicator */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+        <div className="h-8 w-px animate-pulse bg-white" />
       </div>
     </section>
   );

@@ -3,233 +3,290 @@ import { productService } from "@/services/product.service";
 import { ProductCard } from "@/components/store/ProductCard";
 import { prisma } from "@/lib/prisma";
 import { WorldCupHero } from "@/components/store/WorldCupHero";
-import { NationalTeamsSection } from "@/components/store/NationalTeamsSection";
 import { MysteryBoxSection } from "@/components/store/MysteryBoxSection";
 
 export const dynamic = "force-dynamic";
 
-// World Cup 2026 nations
-const wc2026Teams = [
-  { name: "ארגנטינה", flag: "🇦🇷", q: "ארגנטינה" },
-  { name: "ברזיל", flag: "🇧🇷", q: "ברזיל" },
-  { name: "צרפת", flag: "🇫🇷", q: "צרפת" },
-  { name: "ספרד", flag: "🇪🇸", q: "ספרד" },
-  { name: "גרמניה", flag: "🇩🇪", q: "גרמניה" },
-  { name: "אנגליה", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", q: "אנגליה" },
-  { name: "פורטוגל", flag: "🇵🇹", q: "פורטוגל" },
-  { name: "הולנד", flag: "🇳🇱", q: "הולנד" },
-  { name: "קולומביה", flag: "🇨🇴", q: "קולומביה" },
-  { name: "מרוקו", flag: "🇲🇦", q: "מרוקו" },
-  { name: "איטליה", flag: "🇮🇹", q: "איטליה" },
-  { name: "בלגיה", flag: "🇧🇪", q: "בלגיה" },
+const wc2026Nations = [
+  { name: "נבחרת ארגנטינה", q: "ארגנטינה" },
+  { name: "נבחרת ברזיל", q: "ברזיל" },
+  { name: "נבחרת צרפת", q: "צרפת" },
+  { name: "נבחרת ספרד", q: "ספרד" },
+  { name: "נבחרת גרמניה", q: "גרמניה" },
+  { name: "נבחרת אנגליה", q: "אנגליה" },
+  { name: "נבחרת פורטוגל", q: "פורטוגל" },
+  { name: "נבחרת הולנד", q: "הולנד" },
 ];
 
-// Champions League clubs
 const clClubs = [
-  { name: "ריאל מדריד", flag: "🇪🇸", q: "ריאל מדריד" },
-  { name: "ברצלונה", flag: "🇪🇸", q: "ברצלונה" },
-  { name: "ביירן מינכן", flag: "🇩🇪", q: "ביירן" },
-  { name: "פריז סן ז׳רמן", flag: "🇫🇷", q: "פריז" },
-  { name: "ליברפול", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", q: "ליברפול" },
-  { name: "אינטר מילאן", flag: "🇮🇹", q: "אינטר" },
-  { name: "יובנטוס", flag: "🇮🇹", q: "יובנטוס" },
-  { name: "AC מילאן", flag: "🇮🇹", q: "מילאן" },
-  { name: "דורטמונד", flag: "🇩🇪", q: "דורטמונד" },
-  { name: "אתלטיקו", flag: "🇪🇸", q: "אתלטיקו" },
-  { name: "ארסנל", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", q: "ארסנל" },
-  { name: "צ׳לסי", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", q: "צלסי" },
+  { name: "מנצ'סטר יונייטד", color: "#DA291C", abbr: "MU" },
+  { name: "ליברפול", color: "#C8102E", abbr: "LIV" },
+  { name: "טוטנהאם", color: "#132257", abbr: "TOT" },
+  { name: "צ'לסי", color: "#034694", abbr: "CHE" },
+  { name: "ריאל מדריד", color: "#FEBE10", abbr: "RM" },
+  { name: "ברצלונה", color: "#A50044", abbr: "BAR" },
+  { name: "ביירן מינכן", color: "#DC052D", abbr: "BAY" },
+  { name: "פריז", color: "#004170", abbr: "PSG" },
+  { name: "יובנטוס", color: "#000000", abbr: "JUV" },
+  { name: "אינטר", color: "#010E80", abbr: "INT" },
 ];
 
-async function getCategoryCards() {
+const categories = [
+  { slug: "national-teams", label: "חולצות נבחרות" },
+  { slug: "match-jerseys", label: "חולצות מועדון" },
+  { slug: "kids", label: "חליפות ילדים" },
+  { slug: "retro", label: "חולצות רטרו" },
+  { slug: "training", label: "אימוניות" },
+  { slug: "basketball", label: "בגדי כדורסל" },
+  { slug: "sets", label: "מהדורה מוגבלת" },
+  { slug: "accessories", label: "ג'קטים ווינדברייקר" },
+];
+
+async function getSectionData() {
   try {
-    const cats = await prisma.category.findMany({
-      include: {
-        products: {
-          where: { isActive: true },
-          include: { images: { orderBy: { position: "asc" }, take: 1 } },
-          orderBy: { isFeatured: "desc" },
-          take: 1,
+    const [featuredResult, newArrivalsResult, categoryImages, nationImages] = await Promise.all([
+      productService.list({ featured: true, limit: 8 }),
+      productService.list({ limit: 8, page: 3 }),
+      // one image per category slug
+      prisma.category.findMany({
+        include: {
+          products: {
+            where: { isActive: true },
+            include: { images: { orderBy: { position: "asc" }, take: 1 } },
+            orderBy: { isFeatured: "desc" },
+            take: 1,
+          },
         },
-      },
-    });
-    return cats
-      .filter((c) => c.products[0]?.images[0])
-      .map((c) => ({
-        slug: c.slug,
-        name: c.name,
-        image: c.products[0].images[0].url,
-      }));
+      }),
+      // nation images — one product image per nation name
+      Promise.all(
+        wc2026Nations.map((n) =>
+          prisma.product.findFirst({
+            where: { isActive: true, team: { name: { contains: n.q } } },
+            include: { images: { orderBy: { position: "asc" }, take: 1 } },
+            orderBy: { isFeatured: "desc" },
+          })
+        )
+      ),
+    ]);
+
+    const featuredIds = new Set(featuredResult.items.map((p) => p.id));
+    const newArrivals = newArrivalsResult.items.filter((p) => !featuredIds.has(p.id)).slice(0, 8);
+
+    const catImageMap = Object.fromEntries(
+      categoryImages
+        .filter((c) => c.products[0]?.images[0])
+        .map((c) => [c.slug, c.products[0].images[0].url])
+    );
+
+    return {
+      featured: featuredResult.items,
+      newArrivals,
+      catImageMap,
+      nationImages,
+    };
   } catch {
-    return [];
+    return { featured: [], newArrivals: [], catImageMap: {}, nationImages: [] };
   }
 }
 
 export default async function HomePage() {
-  let featured: Awaited<ReturnType<typeof productService.list>>["items"] = [];
-  let newArrivals: Awaited<ReturnType<typeof productService.list>>["items"] = [];
-  let categoryCards: Awaited<ReturnType<typeof getCategoryCards>> = [];
-
-  try {
-    [{ items: featured }, { items: newArrivals }, categoryCards] = await Promise.all([
-      productService.list({ featured: true, limit: 8 }),
-      productService.list({ limit: 8, page: 2 }),
-      getCategoryCards(),
-    ]);
-    const featuredIds = new Set(featured.map((p) => p.id));
-    newArrivals = newArrivals.filter((p) => !featuredIds.has(p.id)).slice(0, 8);
-  } catch {
-    // DB not yet configured
-  }
+  const { featured, newArrivals, catImageMap, nationImages } = await getSectionData();
 
   return (
     <div className="flex flex-col bg-white dark:bg-[#0a0a0a]" dir="rtl">
 
-      {/* ── HERO — always dark (design intent) ──────────────────── */}
+      {/* ── HERO ────────────────────────────────────────────────── */}
       <WorldCupHero />
 
-      {/* ── WORLD CUP NATIONS ──────────────────────────────────── */}
-      <section className="border-b border-gray-200 bg-gray-50 py-8 dark:border-white/8 dark:bg-[#111111]">
-        <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="text-lg">🏆</span>
-            <span className="text-base font-black text-gray-900 dark:text-white">נבחרות מונדיאל 2026</span>
-            <span className="rounded-4 bg-[#E69900] px-2 py-0.5 text-[10px] font-black text-black">48 נבחרות</span>
+      {/* ── WORLD CUP 2026 NATIONS ──────────────────────────────── */}
+      <section className="bg-white py-10 dark:bg-[#0a0a0a]">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+          {/* Section title fanshop-style */}
+          <div className="mb-7 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+            <h2 className="text-lg font-black text-gray-900 dark:text-white">מונדיאל 2026</h2>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
-            {wc2026Teams.map((team) => (
-              <Link
-                key={team.name}
-                href={`/products?q=${encodeURIComponent(team.q)}`}
-                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-gray-200 bg-white px-4 py-3 shadow-sm transition hover:border-[#E69900]/50 hover:bg-[#E69900]/5 dark:border-white/10 dark:bg-white/5 dark:hover:border-[#E69900]/50 dark:hover:bg-[#E69900]/10"
-                style={{ minWidth: 76 }}
-              >
-                <span className="text-3xl leading-none">{team.flag}</span>
-                <span className="text-[11px] font-semibold text-gray-600 group-hover:text-[#E69900] dark:text-gray-300">{team.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── NATIONAL TEAMS SECTION ─────────────────────────────── */}
-      <NationalTeamsSection />
-
-      {/* ── MYSTERY BOX ────────────────────────────────────────── */}
-      <MysteryBoxSection />
-
-      {/* ── BEST SELLERS ───────────────────────────────────────── */}
-      {featured.length > 0 && (
-        <section className="mx-auto w-full max-w-screen-lg px-4 py-12 sm:px-6">
-          <div className="mb-7 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">המוצרים הנמכרים ביותר</h2>
-            </div>
-            <Link href="/products" className="flex items-center gap-1 text-sm font-semibold text-[#E69900] hover:text-[#cc8800]">
-              לכל המוצרים ←
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {featured.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── CHAMPIONS LEAGUE CLUBS ─────────────────────────────── */}
-      <section className="border-y border-gray-200 bg-gray-50 py-8 dark:border-white/8 dark:bg-[#111111]">
-        <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="text-lg">⭐</span>
-            <span className="text-base font-black text-gray-900 dark:text-white">ליגת האלופות</span>
-            <span className="rounded-4 bg-[#507ABE] px-2 py-0.5 text-[10px] font-black text-white">Champions League</span>
-          </div>
-          <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
-            {clClubs.map((club) => (
-              <Link
-                key={club.name}
-                href={`/products?q=${encodeURIComponent(club.q)}`}
-                className="group flex flex-shrink-0 flex-col items-center gap-2 rounded-12 border border-gray-200 bg-white px-4 py-3 shadow-sm transition hover:border-[#507ABE]/50 hover:bg-[#507ABE]/5 dark:border-white/10 dark:bg-white/5 dark:hover:border-[#507ABE]/50 dark:hover:bg-[#507ABE]/10"
-                style={{ minWidth: 88 }}
-              >
-                <span className="text-2xl leading-none">{club.flag}</span>
-                <span className="text-center text-[11px] font-semibold leading-tight text-gray-600 group-hover:text-[#507ABE] dark:text-gray-300">{club.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── WORLD CUP PROMO BANNER ─────────────────────────────── */}
-      <section className="mx-auto w-full max-w-screen-lg px-4 py-10 sm:px-6">
-        <div
-          className="relative overflow-hidden rounded-20 px-8 py-10 text-white"
-          style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}
-        >
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, #E69900 0%, transparent 50%), radial-gradient(circle at 80% 50%, #507ABE 0%, transparent 50%)" }} />
-          <div className="relative flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-right">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-widest text-[#E69900]">🏆 חדש בחנות</p>
-              <h3 className="mt-2 text-3xl font-black leading-tight">
-                חולצות מונדיאל 2026<br />
-                <span className="text-[#E69900]">הגיעו לחנות!</span>
-              </h3>
-              <p className="mt-2 text-sm text-gray-300">ארגנטינה · ברזיל · צרפת · ספרד · ועוד 44 נבחרות</p>
-            </div>
-            <Link
-              href="/products?q=מונדיאל"
-              className="flex-shrink-0 rounded-pill bg-[#E69900] px-10 py-4 text-sm font-black text-black shadow-lg transition hover:bg-[#cc8800]"
-            >
-              לקנייה עכשיו ←
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CATEGORIES WITH REAL IMAGES ────────────────────────── */}
-      {categoryCards.length > 0 && (
-        <section className="border-t border-gray-200 bg-gray-50 py-12 dark:border-white/8 dark:bg-[#111111]">
-          <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
-            <div className="mb-7 flex items-center gap-3">
-              <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">קנה לפי קטגוריה</h2>
-            </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              {categoryCards.map((cat) => (
+          <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
+            {wc2026Nations.map((nation, i) => {
+              const product = nationImages[i];
+              const imgUrl = product?.images?.[0]?.url;
+              return (
                 <Link
-                  key={cat.slug}
-                  href={`/products?category=${cat.slug}`}
-                  className="group relative overflow-hidden rounded-16 bg-gray-200 dark:bg-[#1a1a1a]"
-                  style={{ aspectRatio: "3/4" }}
+                  key={nation.q}
+                  href={`/products?q=${encodeURIComponent(nation.q)}`}
+                  className="group relative overflow-hidden rounded-12 bg-gray-100 dark:bg-[#1a1a1a]"
+                  style={{ aspectRatio: "2/3" }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={cat.image}
-                    alt={cat.name}
-                    className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.2) 70%, transparent 100%)" }} />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="text-sm font-black text-white">{cat.name}</p>
-                    <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-[#E69900] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                      לצפייה ←
-                    </p>
+                  {imgUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={imgUrl} alt={nation.name} className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
+                  )}
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                  <div className="absolute bottom-0 left-0 right-0 p-2 text-center">
+                    <p className="text-[11px] font-bold leading-tight text-white drop-shadow">{nation.name}</p>
                   </div>
                 </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BEST SELLERS ─────────────────────────────────────────── */}
+      {featured.length > 0 && (
+        <section className="bg-white py-10 dark:bg-[#0a0a0a]">
+          <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+            <div className="mb-7 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="h-px w-12 bg-gray-200 dark:bg-white/10" />
+                <h2 className="text-lg font-black text-gray-900 dark:text-white">המוצרים הנמכרים ביותר</h2>
+                <div className="h-px w-12 bg-gray-200 dark:bg-white/10" />
+              </div>
+              <Link href="/products" className="text-sm font-semibold text-[#E69900] hover:text-[#cc8800]">
+                לכל המוצרים ←
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {featured.slice(0, 8).map((product) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* ── TRUST STRIP ─────────────────────────────────────────── */}
+      {/* ── CATEGORIES ───────────────────────────────────────────── */}
+      <section className="bg-gray-50 py-10 dark:bg-[#111111]">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+          <div className="mb-7 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+            <h2 className="text-lg font-black text-gray-900 dark:text-white">הקטגוריות שלנו</h2>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {categories.map((cat) => {
+              const img = catImageMap[cat.slug];
+              return (
+                <Link
+                  key={cat.slug}
+                  href={`/products?category=${cat.slug}`}
+                  className="group relative overflow-hidden rounded-12 bg-gray-200 dark:bg-[#1a1a1a]"
+                  style={{ aspectRatio: "3/4" }}
+                >
+                  {img && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={img} alt={cat.label} className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-110" />
+                  )}
+                  <div className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
+                    <p className="text-sm font-black text-white drop-shadow">{cat.label}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CLUB LOGOS STRIP ─────────────────────────────────────── */}
       <section className="border-y border-gray-200 bg-white py-8 dark:border-white/8 dark:bg-[#0a0a0a]">
-        <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+            <h2 className="text-lg font-black text-gray-900 dark:text-white">קנה לפי קבוצה</h2>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            {clClubs.map((club) => (
+              <Link
+                key={club.name}
+                href={`/products?q=${encodeURIComponent(club.name)}`}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-gray-200 transition group-hover:scale-110 group-hover:border-gray-400 dark:border-white/10"
+                  style={{ backgroundColor: club.color + "18" }}
+                >
+                  <span className="text-xs font-black" style={{ color: club.color }}>{club.abbr}</span>
+                </div>
+                <span className="text-center text-[10px] font-semibold text-gray-600 dark:text-gray-400">{club.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── NBA-STYLE PROMO BANNER ───────────────────────────────── */}
+      <section className="relative overflow-hidden py-0">
+        <div className="relative flex items-center justify-between" style={{ background: "linear-gradient(135deg, #8B0000 0%, #C0392B 50%, #8B0000 100%)", minHeight: 220 }}>
+          {/* Left jersey collage */}
+          {featured[0]?.images?.[0] && (
+            <div className="hidden w-56 flex-shrink-0 sm:block" style={{ height: 220 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={featured[0].images[0].url} alt="" className="h-full w-full object-cover object-top opacity-80" />
+            </div>
+          )}
+          {/* Center text */}
+          <div className="flex-1 px-8 py-10 text-center text-white">
+            <p className="text-sm font-bold uppercase tracking-widest text-red-200">חדש בחנות</p>
+            <h3 className="mt-1 text-3xl font-black leading-tight">
+              החולצות החדשות
+              <br />
+              <span className="text-[#E69900]">של המונדיאל 2026</span>
+            </h3>
+            <Link
+              href="/products?featured=true"
+              className="mt-5 inline-block rounded-pill bg-[#E69900] px-8 py-3 text-sm font-black text-black shadow-lg transition hover:bg-[#cc8800]"
+            >
+              לרכישה
+            </Link>
+          </div>
+          {/* Right jersey collage */}
+          {featured[1]?.images?.[0] && (
+            <div className="hidden w-56 flex-shrink-0 sm:block" style={{ height: 220 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={featured[1].images[0].url} alt="" className="h-full w-full object-cover object-top opacity-80" />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── MYSTERY BOX ──────────────────────────────────────────── */}
+      <MysteryBoxSection />
+
+      {/* ── NEW ARRIVALS ─────────────────────────────────────────── */}
+      {newArrivals.length > 0 && (
+        <section className="bg-white py-10 dark:bg-[#0a0a0a]">
+          <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+            <div className="mb-7 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="h-px w-12 bg-gray-200 dark:bg-white/10" />
+                <h2 className="text-lg font-black text-gray-900 dark:text-white">מוצרים חדשים</h2>
+                <div className="h-px w-12 bg-gray-200 dark:bg-white/10" />
+              </div>
+              <Link href="/products" className="text-sm font-semibold text-[#E69900] hover:text-[#cc8800]">
+                לכל המוצרים ←
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {newArrivals.slice(0, 8).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── TRUST STRIP ──────────────────────────────────────────── */}
+      <section className="border-t border-gray-200 bg-gray-50 py-8 dark:border-white/8 dark:bg-[#111111]">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
           <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {[
-              { icon: "🚚", title: "משלוח חינם", sub: "בקנייה מעל ₪199" },
-              { icon: "🔒", title: "תשלום מאובטח", sub: "SSL · Tranzila מאושר" },
+              { icon: "🚚", title: "משלוח חינם", sub: "בכל הזמנה" },
+              { icon: "🔒", title: "תשלום מאובטח", sub: "SSL · Tranzila" },
               { icon: "↩️", title: "החזרות קלות", sub: "תוך 30 יום" },
               { icon: "⭐", title: "4.9 ★ ביקורות", sub: "מעל 2,000 לקוחות" },
             ].map((item) => (
@@ -243,58 +300,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── NEW ARRIVALS ─────────────────────────────────────────── */}
-      {newArrivals.length > 0 && (
-        <section className="mx-auto w-full max-w-screen-lg px-4 py-12 sm:px-6">
-          <div className="mb-7 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-7 w-1.5 rounded-full bg-[#507ABE]" />
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">חדש בחנות</h2>
-              <span className="rounded-4 bg-[#507ABE] px-2 py-0.5 text-[10px] font-black text-white">NEW</span>
-            </div>
-            <Link href="/products" className="flex items-center gap-1 text-sm font-semibold text-[#507ABE] hover:text-[#3a5a9e]">
-              לכל המוצרים ←
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {newArrivals.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── SECOND PROMO ─────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-screen-lg px-4 pb-12 sm:px-6">
-        <div
-          className="relative overflow-hidden rounded-20 px-8 py-10"
-          style={{ background: "linear-gradient(135deg, #1e3a1e 0%, #0d2b0d 100%)" }}
-        >
-          <div className="absolute inset-0 opacity-15" style={{ backgroundImage: "radial-gradient(circle at 80% 50%, #4caf50 0%, transparent 60%)" }} />
-          <div className="relative flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-right">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-widest text-green-400">⚽ ליגת האלופות</p>
-              <h3 className="mt-2 text-2xl font-black leading-tight text-white">
-                חולצות הקבוצות הגדולות
-              </h3>
-              <p className="mt-2 text-sm text-gray-400">ריאל מדריד · ברצלונה · ביירן · PSG · ליברפול</p>
-            </div>
-            <Link
-              href="/products?q=ריאל מדריד"
-              className="flex-shrink-0 rounded-pill border border-green-500/40 bg-green-500/10 px-10 py-4 text-sm font-black text-green-300 shadow-lg transition hover:bg-green-500/20"
-            >
-              לצפייה בקבוצות ←
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ─────────────────────────────────────────────────── */}
-      <section className="border-t border-gray-200 bg-gray-50 py-14 dark:border-white/8 dark:bg-[#111111]">
-        <div className="mx-auto max-w-screen-lg px-4 sm:px-6">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="h-7 w-1.5 rounded-full bg-[#E69900]" />
-            <h2 className="text-xl font-black text-gray-900 dark:text-white">שאלות נפוצות</h2>
+      {/* ── FAQ ──────────────────────────────────────────────────── */}
+      <section className="bg-white py-12 dark:bg-[#0a0a0a]">
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6">
+          <div className="mb-7 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
+            <h2 className="text-lg font-black text-gray-900 dark:text-white">שאלות נפוצות</h2>
+            <div className="h-px flex-1 bg-gray-200 dark:bg-white/10" />
           </div>
           <div className="mx-auto max-w-2xl divide-y divide-gray-200 dark:divide-white/8">
             {[
@@ -316,6 +328,20 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── WHATSAPP FLOAT ───────────────────────────────────────── */}
+      <a
+        href="https://wa.me/972501234567"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition hover:scale-110"
+        style={{ background: "#25D366" }}
+        aria-label="WhatsApp"
+      >
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+      </a>
     </div>
   );
 }

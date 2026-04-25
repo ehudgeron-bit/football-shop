@@ -33,29 +33,29 @@ const links = [
 
 export function StorefrontFooter() {
   return (
-    <footer className="border-t border-[#f4f4f5] bg-white dark:border-[#1c1c1c] dark:bg-[#0a0a0a]">
+    <footer className="bg-black text-white">
       <div className="mx-auto max-w-screen-xl px-6 py-16">
         <div className="grid grid-cols-2 gap-12 md:grid-cols-4">
           {/* Brand */}
           <div>
-            <Link href="/" className="text-xl font-black tracking-tight text-[#18181b] dark:text-white">
-              Football<span className="text-[#E69900]">.</span>
+            <Link href="/" className="text-xl font-black uppercase tracking-[0.05em] text-white">
+              Football.
             </Link>
-            <p className="mt-4 text-xs leading-relaxed text-[#a1a1aa]">
-              חולצות כדורגל מקוריות — ליגות, קבוצות ונבחרות מובילות בעולם.
+            <p className="mt-4 text-xs leading-relaxed text-white/40">
+              חולצות כדורגל מקוריות — נבחרות מונדיאל 2026.
             </p>
           </div>
 
           {/* Links */}
           {links.map((col) => (
             <div key={col.title}>
-              <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-[#a1a1aa]">
+              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                 {col.title}
               </p>
               <ul className="flex flex-col gap-2.5">
                 {col.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="text-sm text-[#52525b] transition hover:text-[#18181b] dark:text-[#71717a] dark:hover:text-white">
+                    <Link href={item.href} className="text-sm text-white/60 transition hover:text-white">
                       {item.label}
                     </Link>
                   </li>
@@ -65,13 +65,13 @@ export function StorefrontFooter() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-[#f4f4f5] pt-8 dark:border-[#1c1c1c]">
-          <p className="text-xs text-[#a1a1aa]">
-            © {new Date().getFullYear()} Football. כל הזכויות שמורות.
+        <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8">
+          <p className="text-xs text-white/30">
+            © {new Date().getFullYear()} Football. All rights reserved.
           </p>
           <div className="flex gap-3">
             {["Visa", "Mastercard", "PayPal", "Bit"].map((p) => (
-              <span key={p} className="rounded-md border border-[#e4e4e7] px-2.5 py-1 text-[10px] font-semibold text-[#a1a1aa] dark:border-[#2a2a2a]">
+              <span key={p} className="border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/40">
                 {p}
               </span>
             ))}
